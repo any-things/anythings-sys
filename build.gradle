@@ -1,0 +1,42 @@
+buildscript {
+	ext {
+		baseUrl = "http://repo.hatiolab.com/nexus/content";
+		springBootVersion = '1.4.4.RELEASE'
+	}
+	repositories {
+		maven {
+			url baseUrl + '/groups/elidom-repository/'
+			//maven { url 'http://repo.spring.io/plugins-release' }
+		}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")		 
+	}
+}
+
+apply from : 'anythings.gradle'
+apply plugin: 'org.springframework.boot'
+
+jar {	
+	manifest {
+		attributes 'Implementation-Title': 'anythings-sys',
+				   'Implementation-Version': version,
+			       'Main-Class': 'xyz.anythings.sys.AnythingsSysApplication'
+	}
+}
+
+repositories {
+	maven {
+		url baseUrl + '/groups/elidom-repository/'
+	}
+	// mavenCentral()
+}
+
+ext {
+	elingsBaseVersion = getLastVersion('elings-base')
+}
+
+dependencies {
+	compile("com.hatiolab:elings-base:${elingsBaseVersion}") {changing = true}
+}
