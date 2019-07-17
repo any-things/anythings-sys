@@ -7,7 +7,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import xyz.anythings.sys.util.MpsValueUtil;
+import xyz.anythings.sys.util.AnyValueUtil;
 import xyz.elidom.orm.IQueryManager;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.entity.Domain;
@@ -89,7 +89,7 @@ public class SessionUtil {
 			if(SessionUtil.getAttribute("CLIENT_TYPE") != null ) {
 				if(SessionUtil.getAttribute("CLIENT_TYPE").equals("MANAGER")) {
 					HttpServletRequest request = SessionUtil.getCurrentHttpRequest();
-					String subDomain = MpsValueUtil.getClientRequestSubDomain(request);
+					String subDomain = AnyValueUtil.getClientRequestSubDomain(request);
 					
 					if(ValueUtil.isNotEqual(currentDomain.getSubdomain() , subDomain)) {
 						createNewDomain = true;
@@ -113,7 +113,7 @@ public class SessionUtil {
 	 */
 	public static String getCurrentReqeustDomainClass() {
 		HttpServletRequest request = SessionUtil.getCurrentHttpRequest();
-		return MpsValueUtil.getClientRequestSubDomain(request);
+		return AnyValueUtil.getClientRequestSubDomain(request);
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class SessionUtil {
 	 */
 	public static Domain findBySiteClassifier(HttpServletRequest request) {
 		IQueryManager queryManager = BeanUtil.get(IQueryManager.class);
-		String subDomain = MpsValueUtil.getClientRequestSubDomain(request);
+		String subDomain = AnyValueUtil.getClientRequestSubDomain(request);
 		
 		// subdomain이 없는 상태 (ex: http://111.111.111.111)로 접속하면 시스템 도메인으로 판단함.
 		if(ValueUtil.isEqual(subDomain, "_ROOT_")) {

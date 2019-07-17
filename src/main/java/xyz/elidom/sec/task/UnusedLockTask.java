@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import xyz.anythings.sys.AnythingsSysConstants;
+import xyz.anythings.sys.AnyConstants;
 import xyz.anythings.sys.ConfigConstants;
 import xyz.elidom.dbist.dml.Query;
 import xyz.elidom.orm.IQueryManager;
@@ -52,7 +52,7 @@ public class UnusedLockTask {
 	 * @return
 	 */
 	private boolean isJobEnabeld() {
-		return ValueUtil.toBoolean(this.env.getProperty(ConfigConstants.JOB_SCHEDULER_ENABLED, AnythingsSysConstants.FALSE_STRING)); 
+		return ValueUtil.toBoolean(this.env.getProperty(ConfigConstants.JOB_SCHEDULER_ENABLED, AnyConstants.FALSE_STRING)); 
 	}
 
 	/**

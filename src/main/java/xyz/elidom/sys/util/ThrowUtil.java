@@ -3,7 +3,7 @@ package xyz.elidom.sys.util;
 
 import java.util.List;
 
-import xyz.anythings.sys.AnythingsSysConstants;
+import xyz.anythings.sys.AnyConstants;
 import xyz.anythings.sys.ConfigConstants;
 import xyz.elidom.exception.client.ElidomBadRequestException;
 import xyz.elidom.exception.client.ElidomInvalidParamsException;
@@ -618,7 +618,7 @@ public class ThrowUtil {
 	 */
 	public static ElidomValidationException newValidationErrorWithNoLog(String errorMsg) {
 		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
-		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, AnythingsSysConstants.TRUE_STRING));
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, AnyConstants.TRUE_STRING));
 		ElidomValidationException eve = new ElidomValidationException(errorMsg);
 		eve.setWritable(withLogging);
 		throw eve;

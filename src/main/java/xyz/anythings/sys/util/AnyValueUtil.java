@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.common.util.ReflectionUtils;
 import net.sf.common.util.ValueUtils;
-import xyz.anythings.sys.AnythingsSysConstants;
+import xyz.anythings.sys.AnyConstants;
 import xyz.elidom.dbist.dml.Filter;
 import xyz.elidom.dbist.dml.Query;
 import xyz.elidom.orm.OrmConstants;
@@ -31,7 +31,7 @@ import xyz.elidom.util.ClassUtil;
  * 
  * @author shortstop
  */
-public class MpsValueUtil {
+public class AnyValueUtil {
 		
 	/**
 	 * objList를 traversing 하면서 fieldName이 value인 객체 리스트를 추출
@@ -153,7 +153,7 @@ public class MpsValueUtil {
 			return 0;
 		}
 		
-		fieldName = MpsValueUtil.checkKeyField(data, fieldName);
+		fieldName = AnyValueUtil.checkKeyField(data, fieldName);
 		return ValueUtil.toInteger(data.get(fieldName));
 	}
 	
@@ -170,7 +170,7 @@ public class MpsValueUtil {
 			return 0F;
 		}
 		
-		fieldName = MpsValueUtil.checkKeyField(data, fieldName);
+		fieldName = AnyValueUtil.checkKeyField(data, fieldName);
 		return ValueUtil.toFloat(data.get(fieldName));
 	}
 	
@@ -187,7 +187,7 @@ public class MpsValueUtil {
 			return null;
 		}
 		
-		fieldName = MpsValueUtil.checkKeyField(data, fieldName);
+		fieldName = AnyValueUtil.checkKeyField(data, fieldName);
 		return ValueUtil.toString(data.get(fieldName));
 	}
 	
@@ -223,7 +223,7 @@ public class MpsValueUtil {
 			return null;
 		}
 		
-		fieldName = MpsValueUtil.checkKeyField(data, fieldName);
+		fieldName = AnyValueUtil.checkKeyField(data, fieldName);
 		return data.get(fieldName);
 	}
 	
@@ -364,7 +364,7 @@ public class MpsValueUtil {
 				String fromFieldName = fromFieldNames[j];
 				String toFieldName = toFieldNames[j];
 				
-				Object value = MpsValueUtil.getMapData(item, fromFieldName);
+				Object value = AnyValueUtil.getMapData(item, fromFieldName);
 				
 				if(value != null) {
 					toFieldName = ValueUtil.toCamelCase(toFieldName, SysConstants.CHAR_UNDER_SCORE);
@@ -393,7 +393,7 @@ public class MpsValueUtil {
 			String fromFieldName = fromFieldNames[j];
 			String toFieldName = toFieldNames[j];
 			
-			Object value = MpsValueUtil.getMapData(fromObj, fromFieldName);
+			Object value = AnyValueUtil.getMapData(fromObj, fromFieldName);
 			
 			if(value != null) {
 				toFieldName = ValueUtil.toCamelCase(toFieldName, SysConstants.CHAR_UNDER_SCORE);
@@ -482,7 +482,7 @@ public class MpsValueUtil {
 	 * @return
 	 */
 	public static String getClientRequestSubDomain(HttpServletRequest req) {
-		String contextPath = MpsValueUtil.getClientRequestUriPath(req);
+		String contextPath = AnyValueUtil.getClientRequestUriPath(req);
 		
 		// subdomain 이 없는 상태 (ex: http://111.111.111.111) 로 접속하면 시스템 도메인으로 판단함.
 		if(ValueUtil.isEmpty(contextPath)) {
@@ -501,11 +501,11 @@ public class MpsValueUtil {
 	public static String getClientRequestUriPath(HttpServletRequest req) {
 		// TABLET, PDA 환경에서는 client URI 가 없어서 _ROOT_로 생각 함. 
 		if(req.getHeader("referer") == null) {
-			return AnythingsSysConstants.EMPTY_STRING;
+			return AnyConstants.EMPTY_STRING;
 		}
 		
 		String requestUri = req.getHeader("referer");
-		return URI.create(requestUri).getPath().replaceAll(AnythingsSysConstants.SLASH, AnythingsSysConstants.EMPTY_STRING);
+		return URI.create(requestUri).getPath().replaceAll(AnyConstants.SLASH, AnyConstants.EMPTY_STRING);
 	}
 	
 	/**
@@ -554,7 +554,7 @@ public class MpsValueUtil {
 	 * @return
 	 */
 	public static String convertNaStrToNull(String str) {
-		return ValueUtil.isEqualIgnoreCase(AnythingsSysConstants.NOT_AVAILABLE, str) ? null : str;
+		return ValueUtil.isEqualIgnoreCase(AnyConstants.NOT_AVAILABLE, str) ? null : str;
 	}
 	
 	/**
@@ -591,7 +591,7 @@ public class MpsValueUtil {
 		if(ValueUtil.isEmpty(phoneNo)) return ValueUtil.toNotNull(phoneNo);
 		
 		int phoneNoLen = phoneNo.length();
-		separator = ValueUtil.isEmpty(separator) ? AnythingsSysConstants.DASH : separator;
+		separator = ValueUtil.isEmpty(separator) ? AnyConstants.DASH : separator;
 		
 		// 010-123-4567
 		if(phoneNoLen == 10) {
@@ -616,9 +616,9 @@ public class MpsValueUtil {
 		if(ValueUtil.isEmpty(data) || data.length() <= maskingFromIndex) {
 			return data;
 		} else {
-			maskChar = ValueUtil.isEmpty(maskChar) ? AnythingsSysConstants.STAR : maskChar;
+			maskChar = ValueUtil.isEmpty(maskChar) ? AnyConstants.STAR : maskChar;
 			String nonMaskingData = data.substring(0, maskingFromIndex);
-			return nonMaskingData + AnythingsSysConstants.STAR + AnythingsSysConstants.STAR + AnythingsSysConstants.STAR + AnythingsSysConstants.STAR;
+			return nonMaskingData + AnyConstants.STAR + AnyConstants.STAR + AnyConstants.STAR + AnyConstants.STAR;
 		}
 	}
 	
@@ -637,7 +637,7 @@ public class MpsValueUtil {
 		if(maskingIndex > nameLen) return data;
 		
 		StringBuffer buf = new StringBuffer();
-		maskChar = ValueUtil.isEmpty(maskChar) ? AnythingsSysConstants.STAR : maskChar;
+		maskChar = ValueUtil.isEmpty(maskChar) ? AnyConstants.STAR : maskChar;
 		
 		for(int i = 0 ; i < nameLen ; i++) {
 			if(i == maskingIndex) {
@@ -660,7 +660,7 @@ public class MpsValueUtil {
 	public static String maskingPhoneNo(String phoneNo, String maskChar) {
 		if(ValueUtil.isEmpty(phoneNo)) return phoneNo;
 		
-		maskChar = ValueUtil.isEmpty(maskChar) ? AnythingsSysConstants.STAR : maskChar;
+		maskChar = ValueUtil.isEmpty(maskChar) ? AnyConstants.STAR : maskChar;
 		int phoneNoLen = phoneNo.length();
 		int maskCount = phoneNoLen >= 4 ? 4 : phoneNoLen;
 		

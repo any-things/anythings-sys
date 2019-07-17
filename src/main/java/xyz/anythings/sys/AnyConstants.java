@@ -8,7 +8,7 @@ import xyz.elidom.sys.SysConstants;
  * 
  * @author shortstop
  */
-public class AnythingsSysConstants extends BaseConstants {
+public class AnyConstants extends BaseConstants {
 
 	/**
 	 * 기본 unselect fields

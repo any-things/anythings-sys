@@ -1,6 +1,6 @@
 package xyz.anythings.sys.util;
 
-import xyz.anythings.sys.AnythingsSysConstants;
+import xyz.anythings.sys.AnyConstants;
 import xyz.elidom.dbist.dml.Query;
 import xyz.elidom.sys.SysConstants;
 
@@ -9,7 +9,7 @@ import xyz.elidom.sys.SysConstants;
  * 
  * @author shortstop
  */
-public class OrmUtil {
+public class AnyOrmUtil {
 	
 	/**
 	 * 실행을 위한 기본 컨디션을 리턴 
@@ -18,7 +18,7 @@ public class OrmUtil {
 	 */
 	public static Query newConditionForExecution() {
 		Query condition = new Query();
-		condition.addUnselect(AnythingsSysConstants.DEFAULT_UNSELECT_QUERY_FIELDS);
+		condition.addUnselect(AnyConstants.DEFAULT_UNSELECT_QUERY_FIELDS);
 		return condition;
 	}
 	

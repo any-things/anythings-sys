@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import xyz.anythings.sys.util.MpsValueUtil;
+import xyz.anythings.sys.util.AnyValueUtil;
 import xyz.elidom.exception.client.ElidomUnauthorizedException;
 import xyz.elidom.exception.server.ElidomRuntimeException;
 import xyz.elidom.orm.IQueryManager;
@@ -123,7 +123,7 @@ public class LoginController {
 		}
 		
 		// 3. 로그인 정보로 부터 사용자 ID를 조회
-		String ipAddr = MpsValueUtil.getRemoteIp(req);
+		String ipAddr = AnyValueUtil.getRemoteIp(req);
 		User user = this.getUserForAuth(domain, login, ipAddr);
 		
 		// 4. 계정 상태 체크, null이면 OK, 나머지는 추가 프로세스 필요
@@ -158,7 +158,7 @@ public class LoginController {
 		List<Map> siteList = this.searchSiteList(currentUser);
 		
 		for(Map site : siteList) {
-			String domainId = MpsValueUtil.getMapData(site, "id").toString();
+			String domainId = AnyValueUtil.getMapData(site, "id").toString();
 			site.put("current_domain", ValueUtil.isEqualIgnoreCase(domainId, currentDomain.getId().toString()));
 		}
 		
@@ -195,7 +195,7 @@ public class LoginController {
 		Domain domain = (Domain)SessionUtil.getAttribute(SysConstants.CURRENT_DOMAIN);
 		// 없다면 에러
 		if(domain == null) {
-			throw ThrowUtil.newDomainNotExist(MpsValueUtil.getClientRequestSubDomain(req));
+			throw ThrowUtil.newDomainNotExist(AnyValueUtil.getClientRequestSubDomain(req));
 		}
 	
 		return domain;
@@ -323,7 +323,7 @@ public class LoginController {
 		}
 
 		// 로그인 정보로 사용자 정보 체크
-		String ipAddr = MpsValueUtil.getRemoteIp(req);
+		String ipAddr = AnyValueUtil.getRemoteIp(req);
 		User user = this.getUserForAuth(domain, login, ipAddr);
 		
 		// 사용자 정보가 유효한 지 체크
@@ -390,7 +390,7 @@ public class LoginController {
 		Map<String,Object> retMap = new HashMap<String,Object>();
 		
 		// 1. subDomain 이 없을때  ( system domain 으로 route 용 url 일때 ) 
-		if(ValueUtil.isEqual(MpsValueUtil.getClientRequestSubDomain(req), "_ROOT_")) {
+		if(ValueUtil.isEqual(AnyValueUtil.getClientRequestSubDomain(req), "_ROOT_")) {
 			String qry = "SELECT * FROM DOMAINS WHERE ID in ( SELECT DOMAIN_ID FROM DOMAIN_USERS WHERE USER_ID = :userId ) AND SYSTEM_FLAG = 0";
 
 			List<Domain> domainList = this.queryManager.selectListBySql(qry, ValueUtil.newMap("userId", currentUser.getId()), Domain.class, 0, 0);

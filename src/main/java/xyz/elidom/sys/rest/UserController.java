@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import xyz.anythings.sys.AnythingsSysConstants;
+import xyz.anythings.sys.AnyConstants;
 import xyz.elidom.dbist.dml.Filter;
 import xyz.elidom.dbist.dml.Order;
 import xyz.elidom.dbist.dml.Page;
@@ -110,7 +110,7 @@ public class UserController extends AbstractRestService {
 		input.setPageIndex(page == null ? 1 : page.intValue());
 		limit = (limit == null) ? 50 : limit.intValue();
 		input.setPageSize(limit);
-		String[] selectFields = ValueUtil.isEmpty(select) ? null : select.split(AnythingsSysConstants.COMMA);
+		String[] selectFields = ValueUtil.isEmpty(select) ? null : select.split(AnyConstants.COMMA);
 
 		if (!ValueUtil.isEmpty(selectFields)) {
 			List<String> selectColumns = new ArrayList<String>();
