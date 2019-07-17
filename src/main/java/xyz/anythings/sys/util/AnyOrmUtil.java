@@ -1,8 +1,15 @@
 package xyz.anythings.sys.util;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 import xyz.anythings.sys.AnyConstants;
 import xyz.elidom.dbist.dml.Query;
+import xyz.elidom.orm.IQueryManager;
 import xyz.elidom.sys.SysConstants;
+import xyz.elidom.util.BeanUtil;
 
 /**
  * ORM 관련 유틸리티
@@ -10,6 +17,78 @@ import xyz.elidom.sys.SysConstants;
  * @author shortstop
  */
 public class AnyOrmUtil {
+	
+	/**
+	 * 데이터베이스 현재 시간
+	 * 
+	 * @return
+	 */
+	public static Date currentDbTime() {
+		IQueryManager queryMgr = BeanUtil.get(IQueryManager.class);
+		return queryMgr.selectBySql("select sysdate from dual", new HashMap<String, Object>(1), Date.class);
+	}
+	
+	/**
+	 * batchCount건수 별로 배치 생성 
+	 * 
+	 * @param insertList
+	 * @param batchCount
+	 */
+	public static void insertBatch(List<?> insertList, int batchCount) {
+		IQueryManager queryManager = BeanUtil.get(IQueryManager.class);
+		List<Object> batchList = new ArrayList<Object>(batchCount);
+		
+		int count = 0;
+		
+		for(Object obj : insertList) {
+			count++;
+			
+			batchList.add(obj);
+			
+			if(count == batchCount) {
+				queryManager.insertBatch(batchList);
+				count = 0;
+			}
+			
+			if(count == 0) batchList.clear();
+		}
+		
+		if(!batchList.isEmpty()) {
+			queryManager.insertBatch(batchList);
+		}
+	}
+	
+	/**
+	 * batchCount 건수 별로 업데이트 
+	 * 
+	 * @param updateList
+	 * @param batchCount
+	 * @param fields
+	 */
+	public static void updateBatch(List<?> updateList, int batchCount, String... fields) {
+		IQueryManager queryManager = BeanUtil.get(IQueryManager.class);
+		List<Object> batchList = new ArrayList<Object>(batchCount);
+		int count = 0;
+		
+		for(Object obj : updateList) {
+			if(count == 0) {
+				batchList.clear();
+			}
+			
+			count++;
+			
+			batchList.add(obj);
+			
+			if(count == batchCount) {
+				queryManager.updateBatch(batchList, fields);
+				count = 0;
+			}
+		}
+		
+		if(!batchList.isEmpty()) {
+			queryManager.updateBatch(batchList, fields);
+		}
+	}
 	
 	/**
 	 * 실행을 위한 기본 컨디션을 리턴 

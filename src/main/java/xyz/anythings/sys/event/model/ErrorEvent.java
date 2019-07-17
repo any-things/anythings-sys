@@ -17,7 +17,7 @@ import xyz.elidom.util.DateUtil;
  * 
  * @author shortstop
  */
-public class ErrorEvent extends AnyEvent {
+public class ErrorEvent extends SysEvent {
 
 	/**
 	 * 파일 로깅 여부

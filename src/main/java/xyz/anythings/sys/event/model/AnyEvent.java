@@ -4,15 +4,12 @@ import java.util.Map;
 
 /**
  * Anythings 공통 이벤트 모델
+ * 각 모듈에서는 이 이벤트를 확장하여 사용한다.
  * 
  * @author shortstop
  */
-public class AnyEvent {
+public class AnyEvent extends SysEvent {
 
-	/**
-	 * 도메인 ID
-	 */
-	protected Long domainId;
 	/**
 	 * 이벤트 유형
 	 */
@@ -35,22 +32,6 @@ public class AnyEvent {
 	protected Object payload;
 	
 	protected AnyEvent() {
-	}
-	
-	public Long getDomainId() {
-		return domainId;
-	}
-	
-	public void setDomainId(Long domainId) {
-		this.domainId = domainId;
-	}
-
-	public String getEventType() {
-		return eventType;
-	}
-
-	public void setEventType(String eventType) {
-		this.eventType = eventType;
 	}
 
 	public String getEventTarget() {
@@ -77,11 +58,4 @@ public class AnyEvent {
 		this.properties = properties;
 	}
 	
-	public Object getPayload() {
-		return payload;
-	}
-
-	public void setPayload(Object payload) {
-		this.payload = payload;
-	}
 }

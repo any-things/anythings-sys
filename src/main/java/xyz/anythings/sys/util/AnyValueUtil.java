@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,12 +27,29 @@ import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.ClassUtil;
 
 /**
- * ValueUtil
- * TODO SysValueUtil로 이름 변경
+ * AnyValueUtil
  * 
  * @author shortstop
  */
 public class AnyValueUtil {
+	
+	/**
+	 * 32 바이트 길이의 GUID를 생성하여 리턴
+	 * 
+	 * @return
+	 */
+	public static String newUuid32() {
+		return UUID.randomUUID().toString().replace(SysConstants.DASH, SysConstants.EMPTY_STRING);
+	}
+	
+	/**
+	 * 36 바이트 길이의 GUID를 생성하여 리턴
+	 * 
+	 * @return
+	 */
+	public static String newUuid36() {
+		return UUID.randomUUID().toString();
+	}
 		
 	/**
 	 * objList를 traversing 하면서 fieldName이 value인 객체 리스트를 추출
