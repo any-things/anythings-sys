@@ -1,7 +1,7 @@
 package xyz.anythings.sys;
 
 /**
- * Setting에 관리할 설정 키 관련 상수 정의
+ * 설정 관련 키 상수 정의
  *
  * @author shortstop
  */
