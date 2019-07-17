@@ -27,6 +27,7 @@ import xyz.elidom.util.ClassUtil;
 
 /**
  * ValueUtil
+ * TODO SysValueUtil로 이름 변경
  * 
  * @author shortstop
  */
