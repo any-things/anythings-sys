@@ -14,7 +14,7 @@ import xyz.elidom.util.FormatUtil;
  * 
  * @author shortstop
  */
-@Component
+@Component("anythingsSysModuleProperties")
 @EnableConfigurationProperties
 @PropertySource("classpath:/properties/anythings-sys.properties")
 public class ModuleProperties implements IModuleProperties {
@@ -60,6 +60,12 @@ public class ModuleProperties implements IModuleProperties {
 	 */
 	@Value("${anythings.sys.scanServicePackage}")
 	private String scanServicePackage;
+
+	/**
+	 * 모듈에서 사용할 rabbitmq 큐 명칭 
+	 */
+	@Value("${anythings.sys.rabbitQueue:not_use}")
+	private String rabbitQueue;
 
 	/**
 	 * Scan Entity Path
@@ -109,6 +115,10 @@ public class ModuleProperties implements IModuleProperties {
 
 	public String getProjectName() {
 		return this.projectName;
+	}
+
+	public String getRabbitQueue() {
+		return this.rabbitQueue;
 	}
 
 	@Override
