@@ -1,5 +1,7 @@
 package xyz.anythings.sys.event.model;
 
+import xyz.elidom.sys.entity.Domain;
+
 /**
  * Anythings 시스템 최상위 이벤트
  * 
@@ -19,7 +21,24 @@ public class SysEvent {
 	 */
 	protected Object payload;
 	
-	protected SysEvent() {
+	/**
+	 * 기본 생성자
+	 */
+	public SysEvent() {
+		this(Domain.currentDomainId(), null, null);
+	}
+	
+	/**
+	 * 생성자
+	 * 
+	 * @param domainId
+	 * @param eventType
+	 * @param payload
+	 */
+	public SysEvent(Long domainId, String eventType, Object payload) {
+		this.domainId = domainId;
+		this.eventType = eventType;
+		this.payload = payload;
 	}
 	
 	public Long getDomainId() {

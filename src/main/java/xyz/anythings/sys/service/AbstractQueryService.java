@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import xyz.elidom.orm.IQueryManager;
 
 /**
- * Anythings 기본 최상위 서비스
+ * Anythings 기본 최상위 쿼리 서비스
  *  
  * @author shortstop
  */

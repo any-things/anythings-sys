@@ -2,6 +2,7 @@ package xyz.anythings.sys.event.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import xyz.anythings.sys.service.AbstractExecutionService;
 import xyz.anythings.sys.service.AsyncExceptionHandler;
 
 /**
@@ -9,7 +10,7 @@ import xyz.anythings.sys.service.AsyncExceptionHandler;
  * 
  * @author shortstop
  */
-public class AnyEventHandler {
+public class AnyEventHandler extends AbstractExecutionService {
 
 	/**
 	 * 비동기 예외 핸들러
