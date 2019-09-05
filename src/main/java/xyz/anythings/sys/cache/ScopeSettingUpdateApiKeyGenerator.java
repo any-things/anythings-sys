@@ -12,13 +12,13 @@ import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.ClassUtil;
 
 /**
- * 고객사 별 설정 (domainId, comCd, name)에 대한 업데이트하는 (Update) 경우 
- * {domainId}-{comCd}-{name} 으로 캐쉬 키를 생성한다.
+ * 범위 별 설정 (domainId, scopeType, scopecd, name)에 대한 업데이트하는 (Update) 경우 
+ * {domainId}-{scopeType}-{scopeCd}-{name} 으로 캐쉬 키를 생성한다.
  * 
  * @author shortstop
  */
 @Component
-public class CompanySettingUpdateApiKeyGenerator implements KeyGenerator {
+public class ScopeSettingUpdateApiKeyGenerator implements KeyGenerator {
 
 	@Override
 	public Object generate(Object target, Method method, Object... params) {
@@ -30,8 +30,9 @@ public class CompanySettingUpdateApiKeyGenerator implements KeyGenerator {
 		}
 		
 		Object obj = params[params.length - 1];
-		Object comCdVal = ClassUtil.getFieldValue(obj, "comCd");
+		Object scopeType = ClassUtil.getFieldValue(obj, "scopeType");
+		Object scopeCd = ClassUtil.getFieldValue(obj, "scopeCd");
 		Object nameVal = ClassUtil.getFieldValue(obj, "name");
-		return domainIdStr + SysConstants.DASH + comCdVal.toString() + SysConstants.DASH + nameVal.toString();
+		return domainIdStr + SysConstants.DASH + scopeType.toString() + SysConstants.DASH + scopeCd.toString() + SysConstants.DASH + nameVal.toString();
 	}
 }
