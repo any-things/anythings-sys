@@ -10,13 +10,13 @@ import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.util.ValueUtil;
 
 /**
- * 고객사 별 설정 (domainId, comCd, name이 unique)에 대한 FindOne 캐쉬를 위한 KeyGenerator. 
- * {domainId}-{comCd}-{name}으로 캐쉬 키를 생성한다. 
+ * 범위 별 설정 (domainId, scopeType, scopecd, name)에 대한 FindOne 캐쉬를 위한 KeyGenerator. 
+ * {domainId}-{scopeType}-{scopeCd}-{name}으로 캐쉬 키를 생성한다. 
  * 
  * @author shortstop
  */
 @Component
-public class CompanySettingFindApiKeyGenerator implements KeyGenerator {
+public class ScopeSettingFindApiKeyGenerator implements KeyGenerator {
 
 	@Override
 	public Object generate(Object target, Method method, Object... params) {
@@ -27,6 +27,6 @@ public class CompanySettingFindApiKeyGenerator implements KeyGenerator {
 			domainIdStr = "null";
 		}
 		
-		return domainIdStr + SysConstants.DASH + params[0].toString() + SysConstants.DASH + params[1].toString();
+		return domainIdStr + SysConstants.DASH + params[0].toString() + SysConstants.DASH + params[1].toString() + SysConstants.DASH + params[2].toString();
 	}
 }
