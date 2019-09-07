@@ -27,45 +27,53 @@ public class AnyConstants extends BaseConstants {
 	 */
 	public static final String ASTERISK = "*";
 	/**
-	 * NG 
+	 * ng 
 	 */
 	public static final String NG_STRING = "ng";
+	/**
+	 * NG
+	 */
+	public static final String NG_CAP_STRING = "NG";
+	/**
+	 * n
+	 */
+	public static final String N_STRING = "n";
 	/**
 	 * N
 	 */
 	public static final String N_CAP_STRING = "N";
 	/**
+	 * y
+	 */
+	public static final String Y_STRING = "y";
+	/**
 	 * Y
 	 */
 	public static final String Y_CAP_STRING = "Y";
-	/**
-	 * NULL
-	 */
-	public static final String NULL_CAP_STRING = "NULL";
-	/**
-	 * N
-	 */
-	public static final String N_STRING = "n";
-	/**
-	 * Y
-	 */
-	public static final String Y_STRING = "y";
 	/**
 	 * null
 	 */
 	public static final String NULL_STRING = "null";
 	/**
-	 * 해당 없음 상수
+	 * NULL
 	 */
-	public static final String NOT_AVAILABLE = "_na_";
+	public static final String NULL_CAP_STRING = "NULL";
+	/**
+	 * 해당 없음 상수 : _na_
+	 */
+	public static final String NOT_AVAILABLE_STRING = "_na_";
+	/**
+	 * 해당 없음 상수 : _na_
+	 */
+	public static final String NOT_AVAILABLE_CAP_STRING = "NA";
 	/**
 	 * all
 	 */
-	public static final String ALL_STR = "all";
+	public static final String ALL_STRING = "all";
 	/**
 	 * ALL
 	 */
-	public static final String ALL_CAPITAL_STR = "ALL";
+	public static final String ALL_CAP_STRING = "ALL";
 	
 	/**
 	 * 공통 대기 상태 : Waiting

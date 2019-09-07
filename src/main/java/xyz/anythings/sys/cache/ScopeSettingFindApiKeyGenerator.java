@@ -10,8 +10,8 @@ import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.util.ValueUtil;
 
 /**
- * 범위 별 설정 (domainId, scopeType, scopecd, name)에 대한 FindOne 캐쉬를 위한 KeyGenerator. 
- * {domainId}-{scopeType}-{scopeCd}-{name}으로 캐쉬 키를 생성한다. 
+ * 범위 별 설정 (domainId, scopeType, scopeName, name)에 대한 FindOne 캐쉬를 위한 KeyGenerator. 
+ * {domainId}-{scopeType}-{scopeName}-{name}으로 캐쉬 키를 생성한다. 
  * 
  * @author shortstop
  */

@@ -572,7 +572,7 @@ public class AnyValueUtil {
 	 * @return
 	 */
 	public static String convertNaStrToNull(String str) {
-		return ValueUtil.isEqualIgnoreCase(AnyConstants.NOT_AVAILABLE, str) ? null : str;
+		return ValueUtil.isEqualIgnoreCase(AnyConstants.NOT_AVAILABLE_STRING, str) ? null : str;
 	}
 	
 	/**

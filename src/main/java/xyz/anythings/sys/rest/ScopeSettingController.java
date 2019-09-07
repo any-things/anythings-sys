@@ -52,13 +52,13 @@ public class ScopeSettingController extends AbstractRestService {
 		return this.getOne(this.entityClass(), id);
 	}
 	
-	@RequestMapping(value = "/{scope_type}/{scope_cd}/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiDesc(description = "Find One SCope and Name")
-	@Cacheable(cacheNames="CompanySetting", keyGenerator="companySettingFindApiKeyGenerator")
+	@RequestMapping(value = "/{scope_type}/{scope_name}/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiDesc(description = "Find One ScopeSettging")
+	@Cacheable(cacheNames="ScopeSetting", keyGenerator="scopeSettingFindApiKeyGenerator")
 	public ScopeSetting findBy(@PathVariable("scope_type") String scopeType
-								, @PathVariable("scope_cd") String scopeCd
+								, @PathVariable("scope_name") String scopeName
 								, @PathVariable("name") String name) {
-		return this.findScopeSetting(Domain.currentDomainId(), scopeType, scopeCd, name);
+		return this.findByName(Domain.currentDomainId(), scopeType, scopeName, name);
 	}
 
 	@RequestMapping(value = "/{id}/exist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,23 +98,20 @@ public class ScopeSettingController extends AbstractRestService {
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiDesc(description = "Clear Settings Cache")	
-	@CacheEvict(cacheNames = "CompanySetting", allEntries = true)
+	@CacheEvict(cacheNames = "ScopeSetting", allEntries = true)
 	public boolean clearCache() {
 		return true;
 	}
 
 	@ApiDesc(description = "Find One Company and Name")
-	@Cacheable(cacheNames="ScopeSetting", key="#domainId + '-' + #scopeType + '-' + #scopeCd + '-' + #name")
-	public ScopeSetting findByName(Long domainId, String scopeType, String scopeCd,String name) {
-		return this.findScopeSetting(domainId, scopeType, scopeCd, name);
-	}
-	
-	private ScopeSetting findScopeSetting(Long domainId, String scopeType, String scopeCd,String name) {
+	@Cacheable(cacheNames="ScopeSetting", key="#domainId + '-' + #scopeType + '-' + #scopeName + '-' + #name")
+	public ScopeSetting findByName(Long domainId, String scopeType, String scopeName, String name) {
 		Query condition = new Query();
+		condition.addFilter("domainId", domainId);
 		condition.addFilter("scopeType", scopeType);
-		condition.addFilter("scopeCd", scopeCd);
+		condition.addFilter("scopeName", scopeName);
 		condition.addFilter("name", name);
-		condition.addSelect("id", "scopeType", "scopeCd", "name", "value");
+		condition.addSelect("id", "scopeType", "scopeName", "name", "value");
 		return this.queryManager.selectByCondition(ScopeSetting.class, condition);
 	}
 }
