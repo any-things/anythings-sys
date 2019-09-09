@@ -11,7 +11,7 @@ import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.BeanUtil;
 
-@Table(name = "tb_scope_setting", idStrategy = GenerationRule.UUID, uniqueFields="domainId,scopeType,scopeCd,name", indexes = {
+@Table(name = "tb_scope_setting", idStrategy = GenerationRule.UUID, uniqueFields="domainId,scopeType,scopeName,name", indexes = {
 	@Index(name = "ix_tb_scope_setting_0", columnList = "name,scope_name,scope_type,domain_id", unique = true)
 })
 public class ScopeSetting extends xyz.elidom.orm.entity.basic.ElidomStampHook implements ISettingValue {
