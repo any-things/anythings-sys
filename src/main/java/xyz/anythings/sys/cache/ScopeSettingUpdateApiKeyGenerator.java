@@ -12,8 +12,8 @@ import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.ClassUtil;
 
 /**
- * 범위 별 설정 (domainId, scopeType, scopecd, name)에 대한 업데이트하는 (Update) 경우 
- * {domainId}-{scopeType}-{scopeCd}-{name} 으로 캐쉬 키를 생성한다.
+ * 범위 별 설정 (domainId, scopeType, scopeName, name)에 대한 업데이트하는 (Update) 경우 
+ * {domainId}-{scopeType}-{scopeName}-{name} 으로 캐쉬 키를 생성한다.
  * 
  * @author shortstop
  */
@@ -31,8 +31,8 @@ public class ScopeSettingUpdateApiKeyGenerator implements KeyGenerator {
 		
 		Object obj = params[params.length - 1];
 		Object scopeType = ClassUtil.getFieldValue(obj, "scopeType");
-		Object scopeCd = ClassUtil.getFieldValue(obj, "scopeCd");
+		Object scopeName = ClassUtil.getFieldValue(obj, "scopeName");
 		Object nameVal = ClassUtil.getFieldValue(obj, "name");
-		return domainIdStr + SysConstants.DASH + scopeType.toString() + SysConstants.DASH + scopeCd.toString() + SysConstants.DASH + nameVal.toString();
+		return domainIdStr + SysConstants.DASH + scopeType.toString() + SysConstants.DASH + scopeName.toString() + SysConstants.DASH + nameVal.toString();
 	}
 }
