@@ -42,17 +42,20 @@ public class AnythingsSysInitializer {
 	private ModuleConfigSet configSet;
 	
 	@EventListener({ ContextRefreshedEvent.class })
-	public void ready(ContextRefreshedEvent event) {
-		this.logger.info("Anythings Sys module initializing ready...");
-		this.configSet.addConfig(this.module.getName(), this.module);
-		this.configSet.setApplicationModule(this.module.getName());
-		this.scanServices();
+	public void refresh(ContextRefreshedEvent event) {
+		this.logger.info("Anythings Sys module initializing refreshing...");
+		
+		this.logger.info("Anythings Sys module initializing refreshed!");
 	}
 
 	@EventListener({ ApplicationReadyEvent.class })
-	void contextRefreshedEvent(ApplicationReadyEvent event) {
-		this.logger.info("Anythings Sys module initializing started...");
-		this.logger.info("Anythings Sys initializing finished");
+	void ready(ApplicationReadyEvent event) {
+		this.logger.info("Anythings Sys module initializing...");
+		
+		this.configSet.addConfig(this.module.getName(), this.module);
+		this.scanServices();
+		
+		this.logger.info("Anythings Sys initialized!");
 	}
 
 	/**
