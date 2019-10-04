@@ -70,11 +70,4 @@ public interface IModuleProperties {
 	 * @return
 	 */
 	public String getScanEntityPackage();
-	
-	/**
-	 * anythings rabbitmq 모듈 사용시 각 모듈에서 사용할 큐 이름 
-	 * @return
-	 */
-	public String getRabbitQueue();
-	
 }

@@ -62,12 +62,6 @@ public class ModuleProperties implements IModuleProperties {
 	private String scanServicePackage;
 
 	/**
-	 * 모듈에서 사용할 rabbitmq 큐 명칭 
-	 */
-	@Value("${anythings.sys.rabbitQueue:not_use}")
-	private String rabbitQueue;
-
-	/**
 	 * Scan Entity Path
 	 */
 	@Value("${anythings.sys.scanEntityPackage}")
@@ -115,10 +109,6 @@ public class ModuleProperties implements IModuleProperties {
 
 	public String getProjectName() {
 		return this.projectName;
-	}
-
-	public String getRabbitQueue() {
-		return this.rabbitQueue;
 	}
 
 	@Override

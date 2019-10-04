@@ -1,5 +1,7 @@
 package xyz.anythings.sys.event.model;
 
+import java.util.Map;
+
 import xyz.elidom.sys.entity.Domain;
 
 /**
@@ -13,32 +15,46 @@ public class SysEvent {
 	 */
 	protected Long domainId;
 	/**
-	 * 이벤트 유형
+	 *  이벤트 처리 결과 
 	 */
-	protected String eventType;
+	protected Object result;
+	
 	/**
-	 * 이벤트 페이로드
+	 * 확장을 위한 Event 파라미터 map
 	 */
-	protected Object payload;
+	protected Map<String,?> payload;
+	
+	/**
+	 * 이벤트 처리 완료 flag
+	 * 이벤트 처리가 오버라이드 된 경우 기본 이벤트를 skip하기 위한 flag
+	 */
+	protected boolean isExecuted;
+	
 	
 	/**
 	 * 기본 생성자
 	 */
 	public SysEvent() {
-		this(Domain.currentDomainId(), null, null);
+		this(Domain.currentDomainId());
 	}
 	
 	/**
 	 * 생성자
-	 * 
 	 * @param domainId
-	 * @param eventType
+	 */
+	public SysEvent(Long domainId) {
+		this(domainId, null);
+	}
+	
+	/**
+	 * 생성자
+	 * @param domainId
 	 * @param payload
 	 */
-	public SysEvent(Long domainId, String eventType, Object payload) {
+	public SysEvent(Long domainId, Map<String,?> payload) {
 		this.domainId = domainId;
-		this.eventType = eventType;
 		this.payload = payload;
+		this.isExecuted = false;
 	}
 	
 	public Long getDomainId() {
@@ -49,19 +65,19 @@ public class SysEvent {
 		this.domainId = domainId;
 	}
 
-	public String getEventType() {
-		return eventType;
+	public Object getResult() {
+		return result;
 	}
 
-	public void setEventType(String eventType) {
-		this.eventType = eventType;
-	}
-	
-	public Object getPayload() {
-		return payload;
+	public void setResult(Object result) {
+		this.result = result;
 	}
 
-	public void setPayload(Object payload) {
-		this.payload = payload;
+	public boolean isExecuted() {
+		return isExecuted;
+	}
+
+	public void setExecuted(boolean isExecuted) {
+		this.isExecuted = isExecuted;
 	}
 }
