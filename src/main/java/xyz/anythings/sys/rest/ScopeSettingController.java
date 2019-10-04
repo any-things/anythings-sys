@@ -27,7 +27,7 @@ import xyz.elidom.sys.system.service.AbstractRestService;
 @RestController
 @Transactional
 @ResponseStatus(HttpStatus.OK)
-@RequestMapping("/rest/scope_setting")
+@RequestMapping("/rest/scope_settings")
 @ServiceDesc(description = "ScopeSetting Service API")
 public class ScopeSettingController extends AbstractRestService {
 

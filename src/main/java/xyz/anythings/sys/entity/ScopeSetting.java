@@ -6,13 +6,12 @@ import xyz.elidom.dbist.annotation.GenerationRule;
 import xyz.elidom.dbist.annotation.Index;
 import xyz.elidom.dbist.annotation.PrimaryKey;
 import xyz.elidom.dbist.annotation.Table;
-import xyz.elidom.orm.OrmConstants;
 import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.BeanUtil;
 
-@Table(name = "tb_scope_setting", idStrategy = GenerationRule.UUID, uniqueFields="domainId,scopeType,scopeName,name", indexes = {
-	@Index(name = "ix_tb_scope_setting_0", columnList = "name,scope_name,scope_type,domain_id", unique = true)
+@Table(name = "scope_settings", idStrategy = GenerationRule.UUID, uniqueFields="domainId,scopeType,scopeName,name", indexes = {
+	@Index(name = "ix_scope_settings_0", columnList = "name,scope_name,scope_type,domain_id", unique = true)
 })
 public class ScopeSetting extends xyz.elidom.orm.entity.basic.ElidomStampHook implements ISettingValue {
 	/**
@@ -33,20 +32,26 @@ public class ScopeSetting extends xyz.elidom.orm.entity.basic.ElidomStampHook im
 	@Column (name = "id", nullable = false, length = 40)
 	private String id;
 
-	@Column (name = "scope_type", nullable = false, length = 32)
+	@Column (name = "scope_type", nullable = false, length = 30)
 	private String scopeType;
 	
-	@Column (name = "scope_name", nullable = false, length = OrmConstants.FIELD_SIZE_NAME)
+	@Column (name = "scope_name", nullable = false, length = 40)
 	private String scopeName;
 
-	@Column (name = "name", nullable = false, length = OrmConstants.FIELD_SIZE_NAME)
+	@Column (name = "name", nullable = false, length = 40)
 	private String name;
+	
+	@Column (name = "category", length = 100)
+	private String category;
 
-	@Column (name = "value", nullable = false, length = OrmConstants.FIELD_SIZE_NAME)
+	@Column (name = "value", nullable = false, length = 50)
 	private String value;
 
-	@Column (name = "description")
+	@Column (name = "description", length = 100)
 	private String description;
+	
+	@Column (name = "remark", length = 255)
+	private String remark;
 
 	@Column (name = "config", length = 4000)
 	private String config;
@@ -97,6 +102,22 @@ public class ScopeSetting extends xyz.elidom.orm.entity.basic.ElidomStampHook im
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public String getConfig() {

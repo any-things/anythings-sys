@@ -7,7 +7,7 @@ import xyz.elidom.dbist.annotation.Index;
 import xyz.elidom.dbist.annotation.Table;
 
 @Table(name = "onetime_tokens", idStrategy = GenerationRule.UUID, indexes = {
-	@Index(name = "ix_onetime_tokens_0", columnList = "requester_id", unique = true),
+	@Index(name = "ix_onetime_tokens_0", columnList = "requester_id"),
 	@Index(name = "ix_onetime_tokens_1", columnList = "auth_token", unique = true),
 	@Index(name = "ix_onetime_tokens_2", columnList = "user_id")
 })
@@ -21,16 +21,16 @@ public class OnetimeToken extends xyz.elidom.orm.entity.basic.DomainTimeStampHoo
 	@Column (name = "id", nullable = false, length = 40)
 	private String id;
 
-	@Column (name = "requester_id", length = 40)
+	@Column (name = "requester_id", length = 32)
 	private String requesterId;
 
-	@Column (name = "user_id", length = 40)
+	@Column (name = "user_id", length = 32)
 	private String userId;
 	
 	@Column (name = "auth_token", length = 40)
 	private String authToken;
 	
-	@Column (name = "access_ip", length = 16)
+	@Column (name = "access_ip", length = 30)
 	private String accessIp;
 
 	@Column (name = "expired_flag")
