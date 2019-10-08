@@ -74,6 +74,11 @@ public class ModuleProperties implements IModuleProperties {
 	 */
 	@Value("${anythings.sys.projectName}")
 	private String projectName;
+	
+	/**
+	 * 모듈에서 사용할 래빗 큐명칭 
+	 */
+	private String rabbitQueue;
 
 	public String getName() {
 		return this.name;
@@ -109,6 +114,16 @@ public class ModuleProperties implements IModuleProperties {
 
 	public String getProjectName() {
 		return this.projectName;
+	}
+	
+	@Override
+	public String getRabbitmqQueue() {
+		return this.rabbitQueue;
+	}
+
+	@Override
+	public void setRabbitmqQueue(String queueName) {
+		this.rabbitQueue = queueName;
 	}
 
 	@Override

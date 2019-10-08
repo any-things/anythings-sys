@@ -30,7 +30,6 @@ public class SysEvent {
 	 */
 	protected boolean isExecuted;
 	
-	
 	/**
 	 * 기본 생성자
 	 */

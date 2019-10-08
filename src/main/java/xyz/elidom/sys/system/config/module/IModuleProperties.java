@@ -70,4 +70,11 @@ public interface IModuleProperties {
 	 * @return
 	 */
 	public String getScanEntityPackage();
+	
+	/**
+	 * 모듈에 설정된 래빗엠큐 명 
+	 * @return
+	 */
+	public String getRabbitmqQueue();
+	public void setRabbitmqQueue(String queueName);
 }
