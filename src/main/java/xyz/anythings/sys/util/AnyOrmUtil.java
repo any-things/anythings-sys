@@ -1,8 +1,6 @@
 package xyz.anythings.sys.util;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import xyz.anythings.sys.AnyConstants;
@@ -17,17 +15,7 @@ import xyz.elidom.util.BeanUtil;
  * @author shortstop
  */
 public class AnyOrmUtil {
-	
-	/**
-	 * 데이터베이스 현재 시간
-	 * 
-	 * @return
-	 */
-	public static Date currentDbTime() {
-		IQueryManager queryMgr = BeanUtil.get(IQueryManager.class);
-		return queryMgr.selectBySql("select sysdate from dual", new HashMap<String, Object>(1), Date.class);
-	}
-	
+		
 	/**
 	 * batchCount건수 별로 배치 생성 
 	 * 
@@ -37,7 +25,6 @@ public class AnyOrmUtil {
 	public static void insertBatch(List<?> insertList, int batchCount) {
 		IQueryManager queryManager = BeanUtil.get(IQueryManager.class);
 		List<Object> batchList = new ArrayList<Object>(batchCount);
-		
 		int count = 0;
 		
 		for(Object obj : insertList) {
@@ -71,17 +58,16 @@ public class AnyOrmUtil {
 		int count = 0;
 		
 		for(Object obj : updateList) {
-			if(count == 0) {
-				batchList.clear();
-			}
-			
 			count++;
-			
 			batchList.add(obj);
 			
 			if(count == batchCount) {
 				queryManager.updateBatch(batchList, fields);
 				count = 0;
+			}
+			
+			if(count == 0) {
+				batchList.clear();
 			}
 		}
 		
@@ -121,40 +107,8 @@ public class AnyOrmUtil {
 	 * @param limit
 	 * @return
 	 */
-	public static Query newConditionForExecution(int page, int limit) {
-		Query condition = newConditionForExecution();
-		condition.setPageIndex(page);
-		condition.setPageSize(limit);
-		return condition;
-	}
-	
-	/**
-	 * 페이지네이션 정보와 조회 필드가 포함된 검색을 위한 기본 컨디션을 리턴 
-	 * 
-	 * @param page
-	 * @param limit
-	 * @param selectFields
-	 * @return
-	 */
-	public static Query newConditionForExecution(int page, int limit, String... selectFields) {
-		Query condition = newConditionForExecution();
-		condition.addSelect(selectFields);
-		condition.setPageIndex(page);
-		condition.setPageSize(limit);
-		return condition;
-	}
-	
-	/**
-	 * domainId 필터, 페이지네이션 정보가 포함된 검색을 위한 기본 컨디션을 리턴 
-	 * 
-	 * @param domainId
-	 * @param page
-	 * @param limit
-	 * @return
-	 */
 	public static Query newConditionForExecution(Long domainId, int page, int limit) {
-		Query condition = newConditionForExecution();
-		condition.addFilter(SysConstants.ENTITY_FIELD_DOMAIN_ID, domainId);
+		Query condition = newConditionForExecution(domainId);
 		condition.setPageIndex(page);
 		condition.setPageSize(limit);
 		return condition;
@@ -163,17 +117,18 @@ public class AnyOrmUtil {
 	/**
 	 * selectFields 필드로 검색을 위한 기본 컨디션을 리턴 
 	 * 
+	 * @param domainId
 	 * @param selectFields
 	 * @return
 	 */
-	public static Query newConditionForExecution(String... selectFields) {
-		Query condition = new Query();
+	public static Query newConditionForExecution(Long domainId, String... selectFields) {
+		Query condition = newConditionForExecution(domainId);
 		condition.addSelect(selectFields);
 		return condition;
 	}
 	
 	/**
-	 * domainId 필터, 페이지네이션 조건, 검색 필드가 포함된 검색을 위한 기본 컨디션을 리턴 
+	 * 페이지네이션 정보와 조회 필드가 포함된 검색을 위한 기본 컨디션을 리턴 
 	 * 
 	 * @param domainId
 	 * @param page
@@ -182,9 +137,8 @@ public class AnyOrmUtil {
 	 * @return
 	 */
 	public static Query newConditionForExecution(Long domainId, int page, int limit, String... selectFields) {
-		Query condition = new Query();
+		Query condition = newConditionForExecution(domainId, page, limit);
 		condition.addSelect(selectFields);
-		condition.addFilter(SysConstants.ENTITY_FIELD_DOMAIN_ID, domainId);
 		condition.setPageIndex(page);
 		condition.setPageSize(limit);
 		return condition;

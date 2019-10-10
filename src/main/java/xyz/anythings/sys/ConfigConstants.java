@@ -17,6 +17,18 @@ public class ConfigConstants {
 	/**
 	 * Validation Error를 로깅할 지 여부
 	 */
-	public static final String VALIDATION_ERROR_LOGGING_ENABLED = "validation-error.logging.enabled";
+	public static final String VALIDATION_ERROR_LOGGING_ENABLED = "logis.log.validation.error.enabled";
+	/**
+	 * 바코드 최대 길이 - 상품 스캔시 최대 입력 길이
+	 */
+	public static final String SKU_BARCODE_MAX_LENGTH = "logis.job.common.sku.barcode.max.length";
+	/**
+	 * SKU 조회를 위한 코드 필드명 리스트
+	 */
+	public static final String SKU_FIELDS_TO_SEARCH = "logis.job.common.sku.search.code.fields";
+	/**
+	 * SKU 조회를 위한 조회 필드명 리스트
+	 */
+	public static final String SKU_SELECT_FIELDS_TO_SEARCH = "logis.job.common.sku.search.select.fields";
 
 }

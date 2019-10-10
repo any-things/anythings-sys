@@ -1,18 +1,22 @@
 /* Copyright © HatioLab Inc. All rights reserved. */
 package xyz.elidom.sys.util;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-import xyz.anythings.sys.AnyConstants;
 import xyz.anythings.sys.ConfigConstants;
+import xyz.elidom.exception.ElidomException;
 import xyz.elidom.exception.client.ElidomBadRequestException;
 import xyz.elidom.exception.client.ElidomInvalidParamsException;
 import xyz.elidom.exception.client.ElidomRecordNotFoundException;
 import xyz.elidom.exception.client.ElidomServiceNotFoundException;
 import xyz.elidom.exception.client.ElidomUnauthorizedException;
+import xyz.elidom.exception.server.ElidomRuntimeException;
 import xyz.elidom.exception.server.ElidomScriptRuntimeException;
 import xyz.elidom.exception.server.ElidomServiceException;
 import xyz.elidom.exception.server.ElidomValidationException;
+import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.SysMessageConstants;
 
 /**
@@ -21,7 +25,43 @@ import xyz.elidom.sys.SysMessageConstants;
  * @author shortstop
  */
 public class ThrowUtil {
+	
+	/**
+	 * 데이터가 존재하지 않는 경우 메시지
+	 * 
+	 * @param code
+	 * @param params
+	 * @return
+	 */
+	public static String translateMessage(String code, String ... params) {
+		List<String> list = MessageUtil.params(params);
+		return MessageUtil.getMessage(code, code, list);
+	}
 
+	/**
+	 * 데이터가 존재하지 않는 경우 메시지
+	 * 
+	 * @param type
+	 * @param data
+	 * @return
+	 */
+	public static String notFoundRecordMsg(String type, String data) {
+		List<String> params = ThrowUtil.toTypeDataParams(type, data);
+		return MessageUtil.getMessage(SysMessageConstants.NOT_FOUND, "{0}({1}) not found.", params);
+	}
+	
+	/**
+	 * 데이터가 존재하지 않는 경우 메시지
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static String notFoundRecordMsg(String type) {
+		String termType = MessageUtil.getTerm(type, type);
+		List<String> params = ValueUtil.toList(SysConstants.EMPTY_STRING, termType);
+		return MessageUtil.getMessage(SysMessageConstants.NOT_FOUND, "{0}({1}) not found.", params);
+	}
+	
 	/**
 	 * key가 존재하지 않는 경우 발생하는 예외	
 	 * 	- 키 파라미터에서 빈 키를 발견했습니다. 
@@ -60,7 +100,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomInvalidParamsException newInvalidFile(String filename, Throwable th) {
-		return new ElidomInvalidParamsException(SysMessageConstants.INVALID_FILE, "Invalid file [{0}]", MessageUtil.params(filename), th);
+		return new ElidomInvalidParamsException(SysMessageConstants.INVALID_FILE, "Invalid file [{0}]", ValueUtil.toList(filename), th);
 	}
 	
 	/**
@@ -133,7 +173,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newFailToSetFieldValue(String className, String fieldName) {
-		return new ElidomServiceException(SysMessageConstants.FAIL_TO_REFLECT_SET, "Failed to assign value to field({1}) of class ({0})", MessageUtil.params(className, fieldName));
+		return new ElidomServiceException(SysMessageConstants.FAIL_TO_REFLECT_SET, "Failed to assign value to field({1}) of class ({0})", ValueUtil.toList(className, fieldName));
 	}
 	
 	/**
@@ -146,7 +186,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newFailToGetFieldValue(String className, String fieldName) {
-		return new ElidomServiceException(SysMessageConstants.FAIL_TO_REFLECT_GET, "Failed to assign value from field({1}) of class ({0})", MessageUtil.params(className, fieldName));
+		return new ElidomServiceException(SysMessageConstants.FAIL_TO_REFLECT_GET, "Failed to assign value from field({1}) of class ({0})", ValueUtil.toList(className, fieldName));
 	}
 	
 	/**
@@ -159,7 +199,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newInvalidEntityIdType(String entityName, String idType) {
-		return new ElidomValidationException(SysMessageConstants.INVALID_ENTITY_ID_TYPE, "Invalid ID Type ({1}) of entity ({0})", MessageUtil.params(entityName, idType));
+		return new ElidomValidationException(SysMessageConstants.INVALID_ENTITY_ID_TYPE, "Invalid ID Type ({1}) of entity ({0})", ValueUtil.toList(entityName, idType));
 	}
 	
 	/**
@@ -173,7 +213,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newInvalidDataTypeOfEntityIdType(String entityName, String idType, String dataType) {
-		return new ElidomValidationException(SysMessageConstants.INVALID_DATA_TYPE_OF_ENTITY_ID_TYPE, "Data type must be ({2}) of ID Type ({1}) of entity ({0})", MessageUtil.params(entityName, idType, dataType));
+		return new ElidomValidationException(SysMessageConstants.INVALID_DATA_TYPE_OF_ENTITY_ID_TYPE, "Data type must be ({2}) of ID Type ({1}) of entity ({0})", ValueUtil.toList(entityName, idType, dataType));
 	}
 	
 	/**
@@ -185,7 +225,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newNotFoundUniqueFieldInEntity(String entityName) {
-		return new ElidomValidationException(SysMessageConstants.NOT_FOUND_UNIQUE_FIELDS, "Not found uniqueFields in entity ({0})", MessageUtil.params(entityName));
+		return new ElidomValidationException(SysMessageConstants.NOT_FOUND_UNIQUE_FIELDS, "Not found uniqueFields in entity ({0})", ValueUtil.toList(entityName));
 	}
 	
 	/**
@@ -197,7 +237,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newCannotDeleteCauseDetailExist(String entityName) {
-		return new ElidomServiceException(SysMessageConstants.HAS_DETAIL_DATA, "There are detail data in entity ({0}), Please re-try after deleting detail data.", MessageUtil.params(entityName));
+		return new ElidomServiceException(SysMessageConstants.HAS_DETAIL_DATA, "There are detail data in entity ({0}), Please re-try after deleting detail data.", ValueUtil.toList(entityName));
 	}
 	
 	/**
@@ -208,6 +248,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newFailToDeleteDetailEntityData(String detailEntityName, Exception e) {
+		// TODO 다국어 적용
 		return new ElidomServiceException("Failed to delete detail entity [" + detailEntityName + "] - " + e.getMessage());
 	}
 	
@@ -231,7 +272,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newDomainNotExist(String requestServerName) {
-		return new ElidomValidationException(SysMessageConstants.DOMAIN_NOT_EXIST, MessageUtil.params(requestServerName));
+		return new ElidomValidationException(SysMessageConstants.DOMAIN_NOT_EXIST, ValueUtil.toList(requestServerName));
 	}
 	
 	/**
@@ -267,7 +308,54 @@ public class ThrowUtil {
 	public static ElidomValidationException newDataDuplicated(String type, String data) {
 		List<String> params = ThrowUtil.toTypeDataParams(type, data);
 		return new ElidomValidationException(SysMessageConstants.DATA_DUPLICATED, params);
-	}	
+	}
+	
+	/**
+	 * 데이터가 존재하지 않는 경우 예외 
+	 * 	- ({1}) 을(를) 찾을수 없습니다.
+	 * 	- ({1}) not found.
+	 * 
+	 * @param type
+	 * @param data
+	 * @return
+	 */
+	public static ElidomRuntimeException newNotFoundRuntimeException(String type) {
+		String termType = MessageUtil.getTerm(type, type);
+		List<String> params = ValueUtil.toList(SysConstants.EMPTY_STRING, termType);
+		String msg = MessageUtil.getMessage(SysMessageConstants.NOT_FOUND, "{0}({1}) not found.", params);
+		return new ElidomRuntimeException(msg);
+	}
+	
+	/**
+	 * 데이터가 존재하지 않는 경우 예외 
+	 * 	- {0}({1}) 을(를) 찾을수 없습니다.
+	 * 	- {0}({1}) not found.
+	 * 
+	 * @param type
+	 * @param data
+	 * @return
+	 */
+	public static ElidomRuntimeException newNotFoundRuntimeException(String type, String data) {
+		List<String> params = ThrowUtil.toTypeDataParams(type, data);
+		String msg = MessageUtil.getMessage(SysMessageConstants.NOT_FOUND, "{0}({1}) not found.", params);
+		return new ElidomRuntimeException(msg);
+	}
+	
+	/**
+	 * 데이터가 존재하지 않는 경우 예외 
+	 * 	- ({1}) 을(를) 찾을수 없습니다.
+	 * 	- ({1}) not found.
+	 * 
+	 * @param type
+	 * @param data
+	 * @return
+	 */
+	public static ElidomRecordNotFoundException newNotFoundRecord(String type) {
+		String termType = MessageUtil.getTerm(type, type);
+		List<String> params = ValueUtil.toList(SysConstants.EMPTY_STRING, termType);
+		String msg = MessageUtil.getMessage(SysMessageConstants.NOT_FOUND, "{0}({1}) not found.", params);
+		return new ElidomRecordNotFoundException(msg);
+	}
 	
 	/**
 	 * 데이터가 존재하지 않는 경우 예외 
@@ -280,8 +368,24 @@ public class ThrowUtil {
 	 */
 	public static ElidomRecordNotFoundException newNotFoundRecord(String type, String data) {
 		List<String> params = ThrowUtil.toTypeDataParams(type, data);
-		return new ElidomRecordNotFoundException(SysMessageConstants.NOT_FOUND, params);
-	}	
+		String msg = MessageUtil.getMessage(SysMessageConstants.NOT_FOUND, "{0}({1}) not found.", params);
+		return new ElidomRecordNotFoundException(msg);
+	}
+	
+	/**
+	 * 데이터가 존재하지 않는 경우 예외 
+	 * 	- 스캔한 {0}로 {1}(을)를 찾을 수 없습니다.
+	 * 	- Can't find {1} by scanned {0}
+	 * 
+	 * @param type
+	 * @param barcodeType
+	 * @return
+	 */
+	public static ElidomRecordNotFoundException newNotFoundByScanBarcode(String type, String barcodeType) {
+		List<String> params = ThrowUtil.toParamsByTranslation(type, barcodeType);
+		String msg = MessageUtil.getMessage("NOT_FOUND_BY_SCAN_BARCD", "Cannot find {1} by scanned {0}", params);
+		return new ElidomRecordNotFoundException(msg);
+	}
 	
 	/**
 	 * 첨부파일 Root Path가 존재하지 않는 경우 예외 
@@ -301,8 +405,8 @@ public class ThrowUtil {
 	 * 
 	 * @return
 	 */
-	public static ElidomServiceException newNotAllowedEmptyInfo(String info) {
-		return new ElidomServiceException(SysMessageConstants.EMPTY_PARAM, MessageUtil.params(info));
+	public static ElidomValidationException newNotAllowedEmptyInfo(String info) {
+		return new ElidomValidationException(SysMessageConstants.EMPTY_PARAM, MessageUtil.params(info));
 	}
 	
 	/**
@@ -314,7 +418,9 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newInvalidRootPath(String rootPath) {
-		return new ElidomServiceException(SysMessageConstants.INVALID_DATA, MessageUtil.params("terms.label.storage_root", rootPath));
+		List<String> params = MessageUtil.params("terms.label.storage_root");
+		params.add(rootPath);
+		return new ElidomServiceException(SysMessageConstants.INVALID_DATA, params);
 	}
 	
 	/**
@@ -335,7 +441,7 @@ public class ThrowUtil {
 	 * 
 	 * @return
 	 */
-	public static ElidomServiceException newFailToCloneData(){
+	public static ElidomServiceException newFailToCloneData() {
 		return new ElidomServiceException(SysMessageConstants.FAIL_TO_CLONE_DATA, "Failed to clone data.");
 	}
 	
@@ -348,7 +454,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newFailToReadFileContent(String filename) {
-		return new ElidomServiceException(SysMessageConstants.READ_FILE_ERROR, MessageUtil.params(filename));
+		return new ElidomServiceException(SysMessageConstants.READ_FILE_ERROR, ValueUtil.toList(filename));
 	}
 	
 	/**
@@ -360,7 +466,7 @@ public class ThrowUtil {
 	 * @return
 	 */	
 	public static ElidomServiceException newNotFoundFile(String filename) {
-		return new ElidomServiceException(SysMessageConstants.FILE_NOT_FOUND, MessageUtil.params(filename));
+		return new ElidomServiceException(SysMessageConstants.FILE_NOT_FOUND, ValueUtil.toList(filename));
 	}
 	
 	/**
@@ -393,7 +499,9 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newNotFoundDatasource(String datasourceName) {
-		return new ElidomValidationException(SysMessageConstants.NOT_FOUND, MessageUtil.params("terms.label.datasource", datasourceName));
+		List<String> params = MessageUtil.params("terms.label.datasource");
+		params.add(datasourceName);
+		return new ElidomValidationException(SysMessageConstants.NOT_FOUND, params);
 	}
 	
 	/**
@@ -405,7 +513,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceNotFoundException newInvalidServiceUrl(String serviceUrl) {
-		return new ElidomServiceNotFoundException(SysMessageConstants.INVALID_SERVICE_URL, "Invalid Restful Service URL({0}).", MessageUtil.params(serviceUrl));
+		return new ElidomServiceNotFoundException(SysMessageConstants.INVALID_SERVICE_URL, "Invalid Restful Service URL({0}).", ValueUtil.toList(serviceUrl));
 	}
 	
 	/**
@@ -417,12 +525,12 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceNotFoundException newNotFoundService(String serviceUrl) {
-		return new ElidomServiceNotFoundException(SysMessageConstants.NOT_FOUND_URL, "Service Not Found By URL({0}).", MessageUtil.params(serviceUrl));
+		return new ElidomServiceNotFoundException(SysMessageConstants.NOT_FOUND_URL, "Service Not Found By URL({0}).", ValueUtil.toList(serviceUrl));
 	}
 	
 	/**
 	 * 현재 지원하지 않은 메소드인 경우 예외 
-	 * 	- 지원되지 않는 method입니다.
+	 * 	- 지원되지 않는 기능입니다.
 	 * 	- Not support method
 	 * 
 	 * @return
@@ -439,7 +547,7 @@ public class ThrowUtil {
 	 * @return
 	 */	
 	public static ElidomServiceException newFailToProcessTemplate(String templateName, Throwable th) {
-		return new ElidomServiceException(SysMessageConstants.FAIL_TO_PROCESS_TEMPLATE, "Failed to Process {0} Template.", MessageUtil.params(templateName), th);
+		return new ElidomServiceException(SysMessageConstants.FAIL_TO_PROCESS_TEMPLATE, "Failed to Process {0} Template.", ValueUtil.toList(templateName), th);
 	}
 	
 	/**
@@ -450,7 +558,7 @@ public class ThrowUtil {
 	 * @return
 	 */	
 	public static ElidomServiceException newFailToCompileCode(String code, Throwable th) {
-		return new ElidomServiceException(SysMessageConstants.FAIL_TO_COMPILE, "Failed to Compile {0} Code.", MessageUtil.params(code), th);
+		return new ElidomServiceException(SysMessageConstants.FAIL_TO_COMPILE, "Failed to Compile {0} Code.", ValueUtil.toList(code), th);
 	}
 	
 	/**
@@ -461,7 +569,7 @@ public class ThrowUtil {
 	 * @return
 	 */	
 	public static ElidomServiceException newFailToParseCode(String code, Throwable th) {
-		return new ElidomServiceException(SysMessageConstants.FAIL_TO_PARSE, "Failed to parse {0} data.", MessageUtil.params(code), th);
+		return new ElidomServiceException(SysMessageConstants.FAIL_TO_PARSE, "Failed to parse {0} data.", ValueUtil.toList(code), th);
 	}
 	
 	/**
@@ -487,6 +595,18 @@ public class ThrowUtil {
 	}
 	
 	/**
+	 * 현재 지원하지 않은 {0}입니다.
+	 * 	- 지원하지 않는 {0}입니다.
+	 * 	- Not Supported {0}
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static ElidomValidationException newNotSupportedSomething(String type) {
+		return new ElidomValidationException("NOT_SUPPORTED_A", "Not Supported {0}", MessageUtil.params(type));
+	}
+	
+	/**
 	 * 상태가 유효하지 않은 경우 발생하는 예외  
 	 * 	- {type} ({data})은(는) [{status}] 상태가 아닙니다.
 	 * 	- The {0} ({1}) is not [{2}] Status.
@@ -497,7 +617,113 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newInvalidStatus(String type, String data, String status) {
-		return new ElidomValidationException(SysMessageConstants.MISMATCH_STATUS, "The {0} ({1}) is not [{2}] Status.", MessageUtil.params(type, data, status));
+		List<String> params = MessageUtil.params(type);
+		params.add(data);
+		params.add(status);
+		return new ElidomValidationException(SysMessageConstants.MISMATCH_STATUS, "The {0} ({1}) is not [{2}] Status.", params);
+	}
+	/**
+	 * 에러 로깅 없이 상태가 유효하지 않은 경우 발생하는 예외 
+	 * 
+	 * @param errorMsg
+	 * @return
+	 */
+	public static ElidomValidationException newInvalidStatusWithNoLog(String type, String data, String status) {
+		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, SysConstants.TRUE_STRING));
+		ElidomValidationException eve = newInvalidStatus(type,data,status);
+		eve.setWritable(withLogging);
+		throw eve;
+	}
+	/**
+	 * A가 유효하지 않습니다.  
+	 * 	- {0}이(가) 유효하지 않습니다.
+	 * 	- {0} is invalid.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static ElidomValidationException newAIsInvalid(String type) {
+		List<String> params = MessageUtil.params(type);
+		return new ElidomValidationException("A_IS_INVALID", "{0} is invalid.", params);
+	}
+	
+	/**
+	 * {0} 은(는) 이미 {1} 상태입니다.
+	 * 	- {0} 상태가 {1} 입니다.
+	 * 	- The {0} is already {1} status.
+	 * 
+	 * @param type
+	 * @param status
+	 * @return
+	 */
+	public static ElidomValidationException newAlreadyBstatus(String type, String status) {
+		return new ElidomValidationException("A_ALREADY_B_STATUS", "{0} is already {1} status.", MessageUtil.params(type, status));
+	}
+	
+	/**
+	 * A 상태가 B 입니다. 
+	 * 	- {0} 상태가 {1} 입니다.
+	 * 	- Status of {0} is {1}.
+	 * 
+	 * @param type
+	 * @param status
+	 * @return
+	 */
+	public static ElidomValidationException newAStatusIsB(String type, String status) {
+		return new ElidomValidationException("A_STATUS_IS_B", "Status of {0} is {1}.", MessageUtil.params(type, status));
+	}
+	
+	/**
+	 * A 상태가 비활성화 상태입니다.
+	 * 	- {0}이(가) 비활성화 상태입니다.
+	 * 	- {0} is not active.
+	 * 
+	 * @param type
+	 * @param status
+	 * @return
+	 */
+	public static ElidomValidationException newAIsNotActive(String type) {
+		return new ElidomValidationException("A_IS_NOT_ACTIVE", "{0} is not active.", MessageUtil.params(type));
+	}
+	
+	/**
+	 * A 가 충분치 않습니다.
+	 * 	- {0}(이)가 충분치 않습니다.
+	 * 	- {0} is not sufficient
+	 * 
+	 * @param type
+	 * @param status
+	 * @return
+	 */
+	public static ElidomValidationException newAIsNotSufficient(String type) {
+		return new ElidomValidationException("A_IS_NOT_SUFFICIENT", "{0} is not sufficient", MessageUtil.params(type));
+	}
+	
+	/**
+	 * a는 b가 불가능합니다. 
+	 * 	- {0}는 {1}이(가) 불가능합니다.
+	 * 	- {0} is not possible to {1}
+	 * 
+	 * @param type
+	 * @param status
+	 * @return
+	 */
+	public static ElidomValidationException newNotPossibleTo(String subject, String verb) {
+		return new ElidomValidationException("A_IS_NOT_POSSIBLE_TO", "{0} is not possible to {1}", MessageUtil.params(subject, verb));
+	}
+	
+	/**
+	 * a는 b가 불가능합니다. 
+	 * 	- {0}상태인 경우에만 {1}이 가능합니다.
+	 * 	- Only {1} is possible in {0} state.
+	 * 
+	 * @param type
+	 * @param status
+	 * @return
+	 */
+	public static ElidomValidationException newOnlyPossibleState(String subject, String verb) {
+		return new ElidomValidationException("A_IS_POSSIBLE_ONLY_B_STATUS", "Only {1} is possible in {0} state.", MessageUtil.params(subject, verb));
 	}
 	
 	/**
@@ -523,6 +749,18 @@ public class ThrowUtil {
 	 */
 	public static ElidomValidationException newStatusIsNotIng(String type) {
 		return new ElidomValidationException(SysMessageConstants.DOES_NOT_PROCEED, "{0} is not on the process.", MessageUtil.params(type));
+	}
+	
+	/**
+	 * 이미 사용되었는데 다시 사용하려고 할 때 발생하는 예외.
+	 * 	- {0}이(가) 이미 사용되었습니다.
+	 * 	- {0} is already used.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static ElidomValidationException newAlreadyUsed(String type) {
+		return new ElidomValidationException("ALREADY_USED", "{0} is already used.", MessageUtil.params(type));
 	}
 	
 	/**
@@ -607,7 +845,53 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomBadRequestException newHasNoAuthority(String resourceType, String resourceName) {
-		return new ElidomBadRequestException(SysMessageConstants.HAS_NO_AUTHORITY, "You have no authroity to access {0}-{1}", MessageUtil.params(resourceType, resourceName));
+		List<String> params = MessageUtil.params(resourceType);
+		params.add(resourceName);
+		return new ElidomBadRequestException(SysMessageConstants.HAS_NO_AUTHORITY, "You have no authroity to access {0}-{1}", params);
+	}
+	
+	/**
+	 * 지원하지 않은 작업 유형입니다.
+	 * Not Supported Job Type
+	 * 
+	 * @return
+	 */
+	public static ElidomValidationException newJobTypeNotSupported() {
+		String msg = MessageUtil.getMessage("NOT_SUPPORTED_A", "Not Supported {0}", MessageUtil.params("terms.label.job_type"));
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 투입한 상품으로 처리할 작업이 없습니다
+	 * No jobs to process with input sku.
+	 * 
+	 * @return
+	 */
+	public static ElidomValidationException newNoJobsWithInput() {
+		throw new ElidomValidationException(MessageUtil.getMessage("MPS_NO_JOBS_WITH_INPUT", "No jobs to process with input sku."));
+	}
+	
+	/**
+	 * {0} 단위 상품 투입이 불가능합니다
+	 * Can not input items by {0} unit.
+	 * 
+	 * @param unit
+	 * @return
+	 */
+	public static ElidomValidationException newNotAllowedInputByUnit(String unit) {
+		String msg = MessageUtil.getMessage("MPS_NOT_ALLOWED_INPUT_BY_UNIT", "Can not input items by {0} unit.", MessageUtil.params(unit));
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 유효하지 않은 파라미터 에러. 
+	 * 
+	 * @return
+	 */
+	public static ElidomValidationException newInvalidParameters() {
+		String msg = MessageUtil.getMessage("TITLE_INVALID_PARAM", "유효하지 않은 파라미터 에러.");
+		throw new ElidomValidationException(msg);
+
 	}
 	
 	/**
@@ -618,22 +902,115 @@ public class ThrowUtil {
 	 */
 	public static ElidomValidationException newValidationErrorWithNoLog(String errorMsg) {
 		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
-		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, AnyConstants.TRUE_STRING));
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, SysConstants.TRUE_STRING));
 		ElidomValidationException eve = new ElidomValidationException(errorMsg);
 		eve.setWritable(withLogging);
 		throw eve;
 	}
 	
 	/**
-	 * type, data로 타입과 데이터 파라미터를 생성
+	 * 에러 로깅을 하지 않고 ValidationException을 생성
 	 * 
-	 * @param type
-	 * @param data
+	 * @param errorMsg
+	 * @param params
 	 * @return
 	 */
-	private static List<String> toTypeDataParams(String type, String data) {
-		List<String> params = MessageUtil.params(type);
-		params.add(data);
+	public static ElidomValidationException newValidationErrorWithNoLog(String errorMsg, Object ... params) {
+		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
+	    throw ThrowUtil.newValidationErrorWithNoLog(MessageFormat.format(errorMsg, params));
+	}
+	
+	/**
+	 * 에러 로깅을 하지 않고 ValidationException을 생성하는데 translationFlag에 따라서 msgCode를 번역해서 에러 메시지를 생성한다.
+	 * 
+	 * @param translationFlag
+	 * @param msgCode
+	 * @return
+	 */
+	public static ElidomValidationException newValidationErrorWithNoLog(boolean translationFlag, String errorMsg) {
+		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
+		errorMsg = translationFlag ? MessageUtil.getMessage(errorMsg, errorMsg) : errorMsg;
+		throw ThrowUtil.newValidationErrorWithNoLog(errorMsg);
+	}
+	
+	/**
+	 * 에러 로깅을 하지 않고 ValidationException을 생성
+	 * 
+	 * @param translationFlag
+	 * @param msgCode
+	 * @return
+	 */
+	public static ElidomValidationException newValidationErrorWithNoLog(ElidomException eve) {
+		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, SysConstants.TRUE_STRING));
+		eve.setWritable(withLogging);
+		throw (ElidomValidationException) eve;
+	}
+	
+	/**
+	 * 에러 로깅을 하지 않고 ValidationException을 생성하는데 msgCode를 번역해서 에러 메시지를 생성한다.
+	 * 
+	 * @param msgCode
+	 * @param params
+	 * @return
+	 */
+	public static ElidomValidationException newValidationErrorWithNoLog(boolean translationFlag, String errorMsg, String ... params) {
+		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
+		List<String> list = MessageUtil.params(params);
+		errorMsg = translationFlag ? MessageUtil.getMessage(errorMsg, errorMsg) : errorMsg;
+		errorMsg = MessageUtil.getMessage(errorMsg, errorMsg, list);
+		throw ThrowUtil.newValidationErrorWithNoLog(errorMsg);
+	}
+	
+	/**
+	 * 에러 로깅을 하지 않고 ValidationException을 생성하는데 msgCode를 번역해서 에러 메시지를 생성한다.
+	 * 
+	 * @param translationFlag
+	 * @param errorMsg
+	 * @param params
+	 * @return
+	 */
+	public static ElidomValidationException newValidationErrorWithNoLog(boolean translationFlag, String errorMsg, List<String> params) {
+		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
+		errorMsg = translationFlag ? MessageUtil.getMessage(errorMsg, errorMsg) : errorMsg;
+		errorMsg = MessageUtil.getMessage(errorMsg, errorMsg, params);
+		throw ThrowUtil.newValidationErrorWithNoLog(errorMsg);
+	}
+	
+	/**
+	 * type, datum으로 파라미터를 추가
+	 * 
+	 * @param type
+	 * @param datum
+	 * @return
+	 */
+	public static List<String> toTypeDataParams(String type, String ... datum) {
+		String termType = MessageUtil.getTerm(type, type);
+		List<String> params = ValueUtil.toList(termType);
+		
+		if(datum != null && datum.length > 0) {
+			for(String data : datum) {
+				params.add(data);
+			}
+		}
+		
+		return params;
+	}
+	
+	/**
+	 * type, datum으로 파라미터를 추가
+	 * 
+	 * @param type
+	 * @param datum
+	 * @return
+	 */
+	public static List<String> toParamsByTranslation(String ... msgParams) {
+		List<String> params = new ArrayList<String>(msgParams.length);
+		
+		for(String data : msgParams) {
+			params.add(MessageUtil.getTerm(data, data));
+		}
+		
 		return params;
 	}
 }

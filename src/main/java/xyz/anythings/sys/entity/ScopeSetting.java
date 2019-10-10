@@ -32,7 +32,7 @@ public class ScopeSetting extends xyz.elidom.orm.entity.basic.ElidomStampHook im
 	@Column (name = "id", nullable = false, length = 40)
 	private String id;
 
-	@Column (name = "scope_type", nullable = false, length = 30)
+	@Column (name = "scope_type", nullable = false, length = 20)
 	private String scopeType;
 	
 	@Column (name = "scope_name", nullable = false, length = 40)
