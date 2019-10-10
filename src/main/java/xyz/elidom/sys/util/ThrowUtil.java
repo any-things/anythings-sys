@@ -630,7 +630,7 @@ public class ThrowUtil {
 	 */
 	public static ElidomValidationException newInvalidStatusWithNoLog(String type, String data, String status) {
 		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
-		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, SysConstants.TRUE_STRING));
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.LOG_VALIDATION_ERROR_ENABLED, SysConstants.TRUE_STRING));
 		ElidomValidationException eve = newInvalidStatus(type,data,status);
 		eve.setWritable(withLogging);
 		throw eve;
@@ -902,7 +902,7 @@ public class ThrowUtil {
 	 */
 	public static ElidomValidationException newValidationErrorWithNoLog(String errorMsg) {
 		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
-		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, SysConstants.TRUE_STRING));
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.LOG_VALIDATION_ERROR_ENABLED, SysConstants.TRUE_STRING));
 		ElidomValidationException eve = new ElidomValidationException(errorMsg);
 		eve.setWritable(withLogging);
 		throw eve;
@@ -942,7 +942,7 @@ public class ThrowUtil {
 	 */
 	public static ElidomValidationException newValidationErrorWithNoLog(ElidomException eve) {
 		// 에러 로깅을 하지 않게 Exception 생성 - Setting에서 설정할 수 있게 변경
-		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.VALIDATION_ERROR_LOGGING_ENABLED, SysConstants.TRUE_STRING));
+		boolean withLogging = ValueUtil.toBoolean(SettingUtil.getValue(ConfigConstants.LOG_VALIDATION_ERROR_ENABLED, SysConstants.TRUE_STRING));
 		eve.setWritable(withLogging);
 		throw (ElidomValidationException) eve;
 	}
