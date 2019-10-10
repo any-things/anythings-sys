@@ -23,6 +23,7 @@ import xyz.elidom.dbist.dml.Query;
 import xyz.elidom.orm.OrmConstants;
 import xyz.elidom.sec.SecConstants;
 import xyz.elidom.sys.SysConstants;
+import xyz.elidom.sys.util.ThrowUtil;
 import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.ClassUtil;
 
@@ -142,7 +143,7 @@ public class AnyValueUtil {
 			String[] keyArr = addKeys.split(SysConstants.COMMA);
 
 			if (keyArr.length != values.length) {
-				throw new IllegalArgumentException("keys count and values count mismatch!");
+				throw ThrowUtil.newMismatchMapKeyValue();
 			}
 
 			for (int i = 0; i < keyArr.length; i++) {
