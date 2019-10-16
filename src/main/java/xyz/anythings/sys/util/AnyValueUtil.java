@@ -32,7 +32,7 @@ import xyz.elidom.util.ClassUtil;
  * 
  * @author shortstop
  */
-public class AnyValueUtil {
+public class AnyValueUtil extends ValueUtil {
 	
 	/**
 	 * 32 바이트 길이의 GUID를 생성하여 리턴
