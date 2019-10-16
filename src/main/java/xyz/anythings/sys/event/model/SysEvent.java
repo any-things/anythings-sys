@@ -1,7 +1,5 @@
 package xyz.anythings.sys.event.model;
 
-import java.util.Map;
-
 import xyz.elidom.sys.entity.Domain;
 
 /**
@@ -20,9 +18,9 @@ public class SysEvent {
 	protected Object result;
 	
 	/**
-	 * 확장을 위한 Event 파라미터 map
+	 * 확장을 위한 Event 파라미터
 	 */
-	protected Map<String,?> payload;
+	protected Object[] payload;
 	
 	/**
 	 * 이벤트 처리 완료 flag
@@ -50,7 +48,7 @@ public class SysEvent {
 	 * @param domainId
 	 * @param payload
 	 */
-	public SysEvent(Long domainId, Map<String,?> payload) {
+	public SysEvent(Long domainId, Object[] payload) {
 		this.domainId = domainId;
 		this.payload = payload;
 		this.isExecuted = false;
@@ -79,4 +77,13 @@ public class SysEvent {
 	public void setExecuted(boolean isExecuted) {
 		this.isExecuted = isExecuted;
 	}
+	
+	public Object[] getPayload() {
+		return this.payload;
+	}
+	
+	public void setPayLoad(Object[] payload) {
+		this.payload = payload;
+	}
+	
 }
