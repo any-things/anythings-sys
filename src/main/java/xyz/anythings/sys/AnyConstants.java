@@ -95,4 +95,9 @@ public class AnyConstants extends BaseConstants {
 	 * 공통 취소 상태 : Canceled
 	 */
 	public static final String COMMON_STATUS_CANCEL = "C";
+	/**
+	 * 공통 Skip 상태 : Skipped
+	 */
+	public static final String COMMON_STATUS_SKIPPED = "S";
+	
 }
