@@ -477,7 +477,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomServiceException newFailToCreateFile() {
-		return new ElidomServiceException(SysMessageConstants.CREATE_FILE_ERROR, "File 생성 중 에러가 발생하였습니다.");
+		return new ElidomServiceException(SysMessageConstants.CREATE_FILE_ERROR, "An error occurred while creating the file!");
 	}
 	
 	/**
@@ -622,6 +622,7 @@ public class ThrowUtil {
 		params.add(status);
 		return new ElidomValidationException(SysMessageConstants.MISMATCH_STATUS, "The {0} ({1}) is not [{2}] Status.", params);
 	}
+	
 	/**
 	 * 에러 로깅 없이 상태가 유효하지 않은 경우 발생하는 예외 
 	 * 
@@ -635,6 +636,7 @@ public class ThrowUtil {
 		eve.setWritable(withLogging);
 		throw eve;
 	}
+	
 	/**
 	 * A가 유효하지 않습니다.  
 	 * 	- {0}이(가) 유효하지 않습니다.
@@ -889,9 +891,33 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newInvalidParameters() {
-		String msg = MessageUtil.getMessage("TITLE_INVALID_PARAM", "유효하지 않은 파라미터 에러.");
+		String msg = MessageUtil.getMessage("TITLE_INVALID_PARAM", "Invalid parameter error.");
 		throw new ElidomValidationException(msg);
 
+	}
+	
+	/**
+	 * 작업 설정이 설정되지 않은 에러
+	 * 
+	 * @param configSetName
+	 * @param configKey
+	 * @return
+	 */
+	public static ElidomValidationException newJobConfigNotSet(String configSetName, String configKey) {
+		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the job config set [{0}].", ValueUtil.toList(configSetName, configKey));
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 표시기 설정이 설정되지 않은 에러
+	 * 
+	 * @param configSetName
+	 * @param configKey
+	 * @return
+	 */
+	public static ElidomValidationException newIndConfigNotSet(String configSetName, String configKey) {
+		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the indicator config set [{0}].", ValueUtil.toList(configSetName, configKey));
+		throw new ElidomValidationException(msg);
 	}
 	
 	/**
