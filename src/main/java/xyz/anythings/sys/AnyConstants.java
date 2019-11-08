@@ -80,6 +80,10 @@ public class AnyConstants extends BaseConstants {
 	 */
 	public static final String COMMON_STATUS_WAIT = "W";
 	/**
+	 * 공통 투입 상태 : Input
+	 */
+	public static final String COMMON_STATUS_INPUT = "I";
+	/**
 	 * 공통 완료 상태 : Completed
 	 */
 	public static final String COMMON_STATUS_FINISHED = "F";
