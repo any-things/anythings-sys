@@ -63,7 +63,7 @@ public class AnyConstants extends BaseConstants {
 	 */
 	public static final String NOT_AVAILABLE_STRING = "_na_";
 	/**
-	 * 해당 없음 상수 : _na_
+	 * 해당 없음 상수 : NA
 	 */
 	public static final String NOT_AVAILABLE_CAP_STRING = "NA";
 	/**
