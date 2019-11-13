@@ -893,7 +893,28 @@ public class ThrowUtil {
 	public static ElidomValidationException newInvalidParameters() {
 		String msg = MessageUtil.getMessage("TITLE_INVALID_PARAM", "Invalid parameter error.");
 		throw new ElidomValidationException(msg);
-
+	}
+	
+	/**
+	 * 작업 설정이 설정되지 않은 에러
+	 * 
+	 * @param configKey
+	 * @return
+	 */
+	public static ElidomValidationException newJobConfigNotSet(String configKey) {
+		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the job config set.", ValueUtil.toList(configKey));
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 표시기 설정이 설정되지 않은 에러
+	 * 
+	 * @param configKey
+	 * @return
+	 */
+	public static ElidomValidationException newIndConfigNotSet(String configKey) {
+		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the indicator config set.", ValueUtil.toList(configKey));
+		throw new ElidomValidationException(msg);
 	}
 	
 	/**
