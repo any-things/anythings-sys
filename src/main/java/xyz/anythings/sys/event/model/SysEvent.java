@@ -36,7 +36,8 @@ public class SysEvent {
 	}
 	
 	/**
-	 * 생성자
+	 * 생성자 1
+	 *  
 	 * @param domainId
 	 */
 	public SysEvent(Long domainId) {
@@ -44,7 +45,8 @@ public class SysEvent {
 	}
 	
 	/**
-	 * 생성자
+	 * 생성자 2
+	 * 
 	 * @param domainId
 	 * @param payload
 	 */
