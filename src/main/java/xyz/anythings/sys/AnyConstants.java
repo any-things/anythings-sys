@@ -104,4 +104,14 @@ public class AnyConstants extends BaseConstants {
 	 */
 	public static final String COMMON_STATUS_SKIPPED = "S";
 	
+	/**
+	 * Job Type : DAS
+	 */
+	public static final String JOB_TYPE_DAS = "DAS";
+	
+	/**
+	 * MPS Job Type : RTN
+	 */
+	public static final String JOB_TYPE_RTN = "RTN";
+	
 }
