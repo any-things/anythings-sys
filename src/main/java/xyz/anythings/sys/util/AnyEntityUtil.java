@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.common.util.ReflectionUtils;
 import xyz.elidom.dbist.dml.Page;
 import xyz.elidom.dbist.dml.Query;
+import xyz.elidom.exception.ElidomException;
+import xyz.elidom.exception.server.ElidomDatabaseException;
 import xyz.elidom.exception.server.ElidomRuntimeException;
 import xyz.elidom.orm.IQueryManager;
 import xyz.elidom.sys.SysConstants;
@@ -364,6 +367,37 @@ public class AnyEntityUtil extends EntityUtil {
 		}
 		
 		return obj;
+	}
+	
+	/**
+	 * 엔티티 에서 하나의 컬럼에 대한 결과만 조회 한다. 
+	 * 
+	 * @param domainId
+	 * @param exceptionWhenEmpty
+	 * @param resultClazz -- 결과 컬럼 타입 
+	 * @param entityClazz -- 조회할 Entity
+	 * @param selectField -- 조회할 컬림 
+	 * @param fieldNames  -- 조회 조건 필드s
+	 * @param fieldValues -- 조회 조건 값s
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T findItemOneColumn(Long domainId, boolean exceptionWhenEmpty, Class<T> resultClazz, Class<?> entityClazz, String selectField, String fieldNames, Object ... fieldValues) {
+			
+		try {
+			// 1. entity To Object 
+			Object entityClass = entityClazz.newInstance();
+			// 2. entity 조회 
+			entityClass = AnyEntityUtil.findEntityBy(domainId, exceptionWhenEmpty, entityClazz, selectField, fieldNames, fieldValues);
+			// 3. entity 에서 하나의 필드만 리턴 오브젝트에 할당 
+			T retObj = (T) ReflectionUtils.getField(entityClazz, selectField).get(entityClass);
+			// 4. 리턴 
+			return retObj;
+		} catch (ElidomException ee) {
+			throw ee;
+		} catch (Exception e) {
+			throw new ElidomDatabaseException(e);
+		}
 	}
 	
 	/**
