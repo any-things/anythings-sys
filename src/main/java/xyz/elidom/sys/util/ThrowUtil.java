@@ -896,24 +896,35 @@ public class ThrowUtil {
 	}
 	
 	/**
-	 * 작업 설정이 설정되지 않은 에러
+	 * 작업 설정 프로파일이 설정되지 않은 에러
 	 * 
 	 * @param configKey
 	 * @return
 	 */
 	public static ElidomValidationException newJobConfigNotSet(String configKey) {
-		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the job config set.", ValueUtil.toList(configKey));
+		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the job config profile.", ValueUtil.toList(configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
 	/**
-	 * 표시기 설정이 설정되지 않은 에러
+	 * 표시기 설정 프로파일이 설정되지 않은 에러
 	 * 
 	 * @param configKey
 	 * @return
 	 */
 	public static ElidomValidationException newIndConfigNotSet(String configKey) {
-		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the indicator config set.", ValueUtil.toList(configKey));
+		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the indicator config profile.", ValueUtil.toList(configKey));
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 장비 설정 프로파일이 설정되지 않은 에러
+	 * 
+	 * @param configKey
+	 * @return
+	 */
+	public static ElidomValidationException newDeviceConfigNotSet(String configKey) {
+		String msg = MessageUtil.getMessage("DEVICE_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the device config profile.", ValueUtil.toList(configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
@@ -925,7 +936,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newJobConfigNotSet(String configSetName, String configKey) {
-		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the job config set [{0}].", ValueUtil.toList(configSetName, configKey));
+		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the job config profile [{0}].", ValueUtil.toList(configSetName, configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
@@ -937,7 +948,19 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newIndConfigNotSet(String configSetName, String configKey) {
-		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the indicator config set [{0}].", ValueUtil.toList(configSetName, configKey));
+		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the indicator config profile [{0}].", ValueUtil.toList(configSetName, configKey));
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 장비 설정 프로파일이 설정되지 않은 에러
+	 * 
+	 * @param configSetName
+	 * @param configKey
+	 * @return
+	 */
+	public static ElidomValidationException newDeviceConfigNotSet(String configSetName, String configKey) {
+		String msg = MessageUtil.getMessage("DEVICE_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the device config profile [{0}].", ValueUtil.toList(configSetName, configKey));
 		throw new ElidomValidationException(msg);
 	}
 	

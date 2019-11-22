@@ -2,7 +2,6 @@ package xyz.anythings.sys;
 
 import xyz.elidom.base.BaseConstants;
 import xyz.elidom.sys.SysConstants;
-import xyz.elidom.util.ValueUtil;
 
 /**
  * Anythings 관련 상수 정의 
@@ -104,40 +103,5 @@ public class AnyConstants extends BaseConstants {
 	 * 공통 Skip 상태 : Skipped
 	 */
 	public static final String COMMON_STATUS_SKIPPED = "S";
-	
-	/**
-	 * Job Type : DAS
-	 */
-	public static final String JOB_TYPE_DAS = "DAS";
-	
-	/**
-	 * MPS Job Type : RTN
-	 */
-	public static final String JOB_TYPE_RTN = "RTN";
-	
-	/**
-	 * MPS Job Type : RTN3 (무오더 반품)
-	 */
-	public static final String JOB_TYPE_RTN3 = "RTN3";
-	
-	/**
-	 * 무오더 작업 유형인지 체크
-	 * 
-	 * @param jobType
-	 * @return
-	 */
-	public static boolean isNoOrderJobType(String jobType) {
-		return AnyConstants.isRtn3JobType(jobType);
-	}
-	
-	/**
-	 * 작업 유형이 무오더 반품 작업 타입인지 체크 
-	 * 
-	 * @param jobType
-	 * @return
-	 */
-	public static boolean isRtn3JobType(String jobType) {
-		return ValueUtil.isEqualIgnoreCase(AnyConstants.JOB_TYPE_RTN3, jobType);
-	}
 	
 }
