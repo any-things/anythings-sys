@@ -15,7 +15,6 @@ public class BaseResponse {
 	 * 메시지 
 	 */
 	private String message;
-	
 	/**
 	 * 리턴 결과 
 	 */
@@ -31,14 +30,24 @@ public class BaseResponse {
 	 * 생성자 2
 	 * 
 	 * @param success
-	 * @param message
 	 */
-	public BaseResponse(boolean success, String message) {
-		this(success,message,null);
+	public BaseResponse(boolean success) {
+		this(success, null, null);
 	}
 	
 	/**
-	 * 생정자 3 
+	 * 생성자 3
+	 * 
+	 * @param success
+	 * @param message
+	 */
+	public BaseResponse(boolean success, String message) {
+		this(success, message, null);
+	}
+	
+	/**
+	 * 생정자 4
+	 * 
 	 * @param success
 	 * @param message
 	 * @param result
@@ -72,4 +81,5 @@ public class BaseResponse {
 	public Object getResult() {
 		return this.result;
 	}
+
 }
