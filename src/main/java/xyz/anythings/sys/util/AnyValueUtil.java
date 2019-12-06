@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -694,6 +696,19 @@ public class AnyValueUtil extends ValueUtil {
 		} else {
 			return phoneNo.substring(0, phoneNo.length() - 4) + maskStr;
 		}
+	}
+
+	/**
+	 * checkCode가 regExpr룰에 맞는지 체크
+	 *  
+	 * @param regExpr
+	 * @param checkCode
+	 * @return
+	 */
+	public static boolean checkValidateByRegExpr(String regExpr, String checkCode) {
+		Pattern p = Pattern.compile("(" + regExpr + ")");
+		Matcher m = p.matcher(checkCode);
+		return m.find();
 	}
 
 }
