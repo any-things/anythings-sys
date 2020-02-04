@@ -896,6 +896,26 @@ public class ThrowUtil {
 	}
 	
 	/**
+	 * 배치에 작업 설정 프로파일이 설정되지 않은 에러
+	 * 
+	 * @return
+	 */
+	public static ElidomValidationException newJobConfigNotSet() {
+		String msg = MessageUtil.getMessage("BATCH_JOB_CONFIG_IS_NOT_SET", "The job config set is not set in the batch.");
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
+	 * 배치에 표시기 설정 프로파일이 설정되지 않은 에러
+	 * 
+	 * @return
+	 */
+	public static ElidomValidationException newIndConfigNotSet() {
+		String msg = MessageUtil.getMessage("BATCH_IND_CONFIG_IS_NOT_SET", "The indicator config set is not set in the batch.");
+		throw new ElidomValidationException(msg);
+	}
+	
+	/**
 	 * 작업 설정 프로파일이 설정되지 않은 에러
 	 * 
 	 * @param configKey
