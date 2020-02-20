@@ -5,22 +5,27 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import xyz.anythings.sys.model.BaseResponse;
+
 /**
  * Anythings Rest 최상위 이벤트
  * 
  * @author yang
  */
-public class SysRestEvent extends SysEvent{
+public class SysRestEvent extends SysEvent {
+	
 	/**
 	 * REST 호출 PATH
 	 */
 	public String restPath;
-	
+	/**
+	 * 클라이언트에 넘겨줄 결과 
+	 */
+	public BaseResponse returnResult;
 	/**
 	 * 요청 형식  
 	 */
 	public RequestMethod requestMethod;
-	
 	/**
 	 * url 뒤 parameters
 	 */
@@ -35,23 +40,30 @@ public class SysRestEvent extends SysEvent{
 	public List<Map<String,Object>> requestPostBody;
 	
 	/**
-	 * 기본 생성자
+	 * 생성자 1
+	 * 
+	 * @param domainId
+	 * @param restPath
+	 * @param requestMethod
 	 */
 	public SysRestEvent(long domainId, String restPath, RequestMethod requestMethod) {
 		this(domainId,restPath,requestMethod, null);
 	}
 	
 	/**
-	 * 생성자
+	 * 생성자 2
+	 * 
 	 * @param domainId
+	 * @param restPath
+	 * @param requestMethod
+	 * @param requestParams
 	 */
-	public SysRestEvent(long domainId, String restPath, RequestMethod requestMethod, Map<String,Object> requestParams) {
-		super(domainId,null);
+	public SysRestEvent(long domainId, String restPath, RequestMethod requestMethod, Map<String, Object> requestParams) {
+		super(domainId, null);
 		this.setRestPath(restPath);
 		this.setRequestMethod(requestMethod);
 		this.setRequestParams(requestParams);
 	}
-	
 
 	public String getRestPath() {
 		return restPath;
@@ -59,6 +71,14 @@ public class SysRestEvent extends SysEvent{
 
 	public void setRestPath(String restPath) {
 		this.restPath = restPath;
+	}
+	
+	public BaseResponse getReturnResult() {
+		return returnResult;
+	}
+
+	public void setReturnResult(BaseResponse returnResult) {
+		this.returnResult = returnResult;
 	}
 	
 	public RequestMethod getRequestMethod() {
