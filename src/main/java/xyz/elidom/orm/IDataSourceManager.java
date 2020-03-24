@@ -44,6 +44,13 @@ public interface IDataSourceManager {
 	public IQueryManager getQueryManager(String dataSourceName);
 	
 	/**
+	 * entity 로 IQueryManager를 찾는다.
+	 * @param entity entityClass
+	 * @return
+	 */
+	public IQueryManager getQueryManager(Class<?> entityClass);
+
+	/**
 	 * DataSource를 초기화
 	 * 
 	 * @param dataSourceName

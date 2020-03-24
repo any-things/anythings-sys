@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Component;
 
+import xyz.elidom.dbist.annotation.DataSourceLinkType;
 import xyz.elidom.dbist.ddl.impl.DdlJdbc;
 import xyz.elidom.dbist.dml.impl.DmlJdbc2;
 import xyz.elidom.dbist.processor.Preprocessor;
@@ -22,6 +23,10 @@ import xyz.elidom.exception.server.ElidomValidationException;
 import xyz.elidom.orm.IDataSourceManager;
 import xyz.elidom.orm.IQueryManager;
 import xyz.elidom.orm.OrmConstants;
+import xyz.elidom.sys.entity.Domain;
+import xyz.elidom.sys.util.SettingUtil;
+import xyz.elidom.util.BeanUtil;
+import xyz.elidom.util.ValueUtil;
 
 /**
  * 시스템 기본 데이터소스외에 다른 데이터소스를 관리하기 위한 매니저
@@ -61,6 +66,44 @@ public class DataSourceManager implements IDataSourceManager {
 		return queryManager;
 	}
 
+	@Override
+	public IQueryManager getQueryManager(Class<?> entityClass) {
+		
+		xyz.elidom.dbist.annotation.Table tableAnn = entityClass.getAnnotation(xyz.elidom.dbist.annotation.Table.class);
+		
+		// 1. ann 이 null  
+		if(tableAnn == null) {
+			return this.getDefaultDataSource();
+		}
+		
+		// 2. ann 에서 linkType 정보 가져오기 
+		String linkType = tableAnn.linkType();
+		
+		// 3. linkType == SELF or DB_LINK 이면 default ;
+		if(ValueUtil.isEqualIgnoreCase(linkType, DataSourceLinkType.SELF) || ValueUtil.isEqualIgnoreCase(linkType, DataSourceLinkType.DB_LINK)) {
+			return this.getDefaultDataSource();
+		}
+		
+		// 4. settings 에서 xyz.elings.db.ref.name 조회 
+		String dbRefName = SettingUtil.getValue(Domain.currentDomainId(), "xyz.elings.db.ref.name." + tableAnn.name());
+		if(ValueUtil.isEmpty(dbRefName)) {
+			dbRefName = SettingUtil.getValue(Domain.currentDomainId(), "xyz.elings.db.ref.name", "self");
+		}
+		
+		// 5. 최종 setting 이 self 이면 retun default 
+		if(ValueUtil.isEqualIgnoreCase(dbRefName, "self")) {
+			return this.getDefaultDataSource();
+		}
+		
+		// 6. POOL 검색 
+		IQueryManager queryManager = QUERY_MANAGER_POOL.get(dbRefName);
+		if (queryManager == null) {
+			throw new ElidomValidationException("DataSource [" + dbRefName + "] Not Found!");
+		}
+
+		return queryManager;
+	}
+	
 	@Override
 	public void initializeDataSource(String dataSourceName, String driverClassName, String url, String user, String passwd, int minIdle, int maxIdle, int maxActive, long maxWait,
 			long evictTime) {
@@ -138,6 +181,10 @@ public class DataSourceManager implements IDataSourceManager {
 	@Override
 	public Set<String> getDataSourceNames() {
 		return QUERY_MANAGER_POOL.keySet();
+	}
+	
+	private IQueryManager getDefaultDataSource() {
+		return BeanUtil.get(IQueryManager.class);
 	}
 
 }
