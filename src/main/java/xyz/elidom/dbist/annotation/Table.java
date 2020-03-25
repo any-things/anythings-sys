@@ -133,10 +133,10 @@ public @interface Table {
 	/**
 	 * DB link Type
 	 * DataSourceLinkType.SELF : default
-	 * DataSourceLinkType.DB_LINK, DataSourceLinkType.DATASOURCE :  
+	 * DataSourceLinkType.DATASOURCE :  
 	 *  - settings 의 기본 명칭을 검색 후 사용 ( xyz.elings.db.ref.name )
 	 *  - settings 에 값이 없거나 self로 등록 되어 있을 경우 기본 데이터소스 사용 
 	 * @return
 	 */
-	String linkType() default DataSourceLinkType.SELF;
+	String dataSourceType() default DataSourceType.SELF;
 }

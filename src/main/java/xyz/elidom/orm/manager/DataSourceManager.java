@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Component;
 
-import xyz.elidom.dbist.annotation.DataSourceLinkType;
+import xyz.elidom.dbist.annotation.DataSourceType;
 import xyz.elidom.dbist.ddl.impl.DdlJdbc;
 import xyz.elidom.dbist.dml.impl.DmlJdbc2;
 import xyz.elidom.dbist.processor.Preprocessor;
@@ -76,11 +76,11 @@ public class DataSourceManager implements IDataSourceManager {
 			return this.getDefaultDataSource();
 		}
 		
-		// 2. ann 에서 linkType 정보 가져오기 
-		String linkType = tableAnn.linkType();
+		// 2. ann 에서 sourceType 정보 가져오기 
+		String sourceType = tableAnn.dataSourceType();
 		
 		// 3. linkType == SELF or DB_LINK 이면 default ;
-		if(ValueUtil.isEqualIgnoreCase(linkType, DataSourceLinkType.SELF) || ValueUtil.isEqualIgnoreCase(linkType, DataSourceLinkType.DB_LINK)) {
+		if(ValueUtil.isEqualIgnoreCase(sourceType, DataSourceType.SELF)) {
 			return this.getDefaultDataSource();
 		}
 		

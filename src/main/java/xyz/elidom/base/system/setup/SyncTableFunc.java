@@ -8,7 +8,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
 
 import net.sf.common.util.ValueUtils;
-import xyz.elidom.dbist.annotation.DataSourceLinkType;
+import xyz.elidom.dbist.annotation.DataSourceType;
 import xyz.elidom.dbist.ddl.Ddl;
 import xyz.elidom.dbist.metadata.Table;
 import xyz.elidom.orm.util.DdlUtil;
@@ -59,12 +59,12 @@ public class SyncTableFunc {
 				continue;
 			} 
 
-			// 2. linkType 확인
+			// 2. sourceType 확인
 			// self 인 것만 ddl 처리 
-			String linkType = (String)tableInfo.get("linkType");
+			String sourceType = (String)tableInfo.get("sourceType");
 
 			// 2.1. 현재는 기본 데이터 소스외의 엔티티는 자동으로 테이블 형상 관리를 지원 하지 않음.
-			if(ValueUtil.isEqualIgnoreCase(linkType, DataSourceLinkType.SELF) == false) {
+			if(ValueUtil.isEqualIgnoreCase(sourceType, DataSourceType.SELF) == false) {
 				continue;
 			}
 			
