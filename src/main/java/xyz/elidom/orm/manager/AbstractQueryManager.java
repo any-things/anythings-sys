@@ -23,7 +23,6 @@ import xyz.elidom.orm.entity.basic.IEntityHook;
 import xyz.elidom.orm.model.ReturnDefaultMessage;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.util.EntityUtil;
-import xyz.elidom.util.BeanUtil;
 import xyz.elidom.util.ClassUtil;
 import xyz.elidom.util.FormatUtil;
 import xyz.elidom.util.ValueUtil;
@@ -1808,7 +1807,7 @@ public abstract class AbstractQueryManager implements IQueryManager {
 	protected boolean isEmptyKeyValue(Object data) {
 		Query query = null;
 		try {
-			query = BeanUtil.get(DmlJdbc2.class).toPkQuery(data);
+			query = ((DmlJdbc2)this.getDml()).toPkQuery(data);
 		} catch (Exception e) {
 			throw new ElidomRuntimeException(e.getMessage(), e);
 		}

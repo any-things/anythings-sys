@@ -27,6 +27,7 @@ import xyz.elidom.orm.IQueryManager;
 import xyz.elidom.orm.OrmConstants;
 import xyz.elidom.orm.entity.basic.AbstractStamp;
 import xyz.elidom.orm.entity.basic.EntityCrudHook;
+import xyz.elidom.orm.manager.DataSourceManager;
 import xyz.elidom.sys.SysConfigConstants;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.entity.Domain;
@@ -36,6 +37,7 @@ import xyz.elidom.sys.util.AssertUtil;
 import xyz.elidom.sys.util.EntityUtil;
 import xyz.elidom.sys.util.SettingUtil;
 import xyz.elidom.sys.util.ThrowUtil;
+import xyz.elidom.util.BeanUtil;
 import xyz.elidom.util.ClassUtil;
 import xyz.elidom.util.ValueUtil;
 import xyz.elidom.util.converter.msg.IJsonParser;
@@ -54,9 +56,11 @@ public abstract class DynamicDataSourceService extends EntityCrudHook {
 	@Autowired
 	@Qualifier("export")
 	protected IExcelSerializer excelExporter;
-
+	
 	@Autowired
 	protected IWorkbookDownloadHandler excelDownloader;	
+	
+	private IQueryManager queryManager;
 
 	/**
 	 * Entity Class 리턴 - 구현 서비스에서 정의 필요
@@ -66,11 +70,18 @@ public abstract class DynamicDataSourceService extends EntityCrudHook {
 	protected abstract Class<?> entityClass();
 
 	/**
-	 * QueryManager 리턴 - 구현 서비스에서 정의 필요
-	 *  ex) BeanUtil.get(IDataSourceManager.class).getQueryManager(entityClass());
+	 * 데이터 소스 가져오기  
 	 * @return
 	 */
-	protected abstract IQueryManager queryManager();
+	private IQueryManager queryManager() {
+		if(this.queryManager == null ) {
+			return BeanUtil.get(DataSourceManager.class).getQueryManager(this.entityClass());
+		}
+		
+		return this.queryManager;
+	}
+	
+	
 	/**
 	 * JSON Parser
 	 * 
