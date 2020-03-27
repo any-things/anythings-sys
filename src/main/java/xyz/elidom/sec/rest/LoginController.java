@@ -175,7 +175,7 @@ public class LoginController {
 	 */
 	@SuppressWarnings("rawtypes")
 	private List<Map> searchSiteList(User currentUser) {
-		String sql = "select id, name, brand_name, description, subdomain from domains where id in (select domain_id from domain_users where user_id = :userId) and system_flag = 0 ";
+		String sql = "select id, name, brand_name, description, subdomain from domains where id in (select domain_id from domain_users where user_id = :userId)";
 		
 		if(currentUser.getSuperUser()) {
 			sql += " union all select id, name, brand_name, description, subdomain from domains where system_flag = 1";
