@@ -921,8 +921,8 @@ public class ThrowUtil {
 	 * @param configKey
 	 * @return
 	 */
-	public static ElidomValidationException newJobConfigNotSet(String configKey) {
-		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the job config profile.", ValueUtil.toList(configKey));
+	public static ElidomValidationException newJobConfigNotSet(String configSetCd, String configKey) {
+		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the job config set [{0}].", ValueUtil.toList(configSetCd, configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
@@ -933,7 +933,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newIndConfigNotSet(String configKey) {
-		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the indicator config profile.", ValueUtil.toList(configKey));
+		String msg = MessageUtil.getMessage("IND_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the indicator config set [{0}].", ValueUtil.toList("", configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
@@ -944,19 +944,18 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newDeviceConfigNotSet(String configKey) {
-		String msg = MessageUtil.getMessage("DEVICE_CONFIG_IS_NOT_SET", "The setting [{0}] is not set in the device config profile.", ValueUtil.toList(configKey));
+		String msg = MessageUtil.getMessage("DEVICE_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the device config set [{0}].", ValueUtil.toList("", configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
 	/**
 	 * 작업 설정이 설정되지 않은 에러
 	 * 
-	 * @param configSetName
 	 * @param configKey
 	 * @return
 	 */
-	public static ElidomValidationException newJobConfigNotSet(String configSetName, String configKey) {
-		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the job config profile [{0}].", ValueUtil.toList(configSetName, configKey));
+	public static ElidomValidationException newJobConfigNotSet(String configKey) {
+		String msg = MessageUtil.getMessage("JOB_CONFIG_IS_NOT_SET", "The setting [{1}] is not set in the job config profile [{0}].", ValueUtil.toList("", configKey));
 		throw new ElidomValidationException(msg);
 	}
 	
