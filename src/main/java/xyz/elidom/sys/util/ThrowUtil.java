@@ -865,12 +865,12 @@ public class ThrowUtil {
 	
 	/**
 	 * 투입한 상품으로 처리할 작업이 없습니다
-	 * No jobs to process with input sku.
+	 * No jobs to process by input sku.
 	 * 
 	 * @return
 	 */
 	public static ElidomValidationException newNoJobsWithInput() {
-		throw new ElidomValidationException(MessageUtil.getMessage("MPS_NO_JOBS_WITH_INPUT", "No jobs to process with input sku."));
+		throw new ElidomValidationException(MessageUtil.getMessage("NO_JOBS_TO_PROCESS_BY_INPUT", "No jobs to process with input sku."));
 	}
 	
 	/**
@@ -881,7 +881,7 @@ public class ThrowUtil {
 	 * @return
 	 */
 	public static ElidomValidationException newNotAllowedInputByUnit(String unit) {
-		String msg = MessageUtil.getMessage("MPS_NOT_ALLOWED_INPUT_BY_UNIT", "Can not input items by {0} unit.", MessageUtil.params(unit));
+		String msg = MessageUtil.getMessage("NOT_ALLOWED_INPUT_BY_UNIT", "Can not input items by {0} unit.", MessageUtil.params(unit));
 		throw new ElidomValidationException(msg);
 	}
 	
