@@ -76,6 +76,23 @@ public class AnyConstants extends BaseConstants {
 	public static final String ALL_CAP_STRING = "ALL";
 	
 	/**
+	 * 문자열 0
+	 */
+	public static final String ZERO_STRING = "0";
+	/**
+	 * 문자열 1
+	 */
+	public static final String ONE_STRING = "1";
+	/**
+	 * 문자열 -1
+	 */
+	public static final String MINUS_ONE_STRING = "-1";
+	/**
+	 * 문자열 9
+	 */
+	public static final String NINE_STRING = "9";
+	
+	/**
 	 * 공통 대기 상태 : Waiting
 	 */
 	public static final String COMMON_STATUS_WAIT = "W";

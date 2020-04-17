@@ -607,6 +607,18 @@ public class ThrowUtil {
 	}
 	
 	/**
+	 * 지원하지 않는 기능입니다.
+	 * 	- 지원하지 않는 기능입니다.
+	 * 	- Not supported method.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static ElidomValidationException newNotSupportedMethod() {
+		return new ElidomValidationException("NOT_SUPPORTED_METHOD", "Not supported method.");
+	}
+
+	/**
 	 * 상태가 유효하지 않은 경우 발생하는 예외  
 	 * 	- {type} ({data})은(는) [{status}] 상태가 아닙니다.
 	 * 	- The {0} ({1}) is not [{2}] Status.
