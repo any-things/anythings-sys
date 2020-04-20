@@ -243,23 +243,23 @@ public class SeedController implements InitialSetup {
 		// 5. 기본 Validation Check
 		this.checkBasicTransactionParams(initialParams);
 		
-		// 6. 임시 도메인 생성
+		// 6. 속도를 위해 엔티티 저장 시 Validation Check를 할 지 여부를 설정한다. 
+		boolean entityValidateBeforeSave = ValueUtil.toBoolean(env.getProperty(CoreConfigConstants.DBIST_VALIDATE_BEFORE_SAVE, SysConstants.FALSE_STRING));
+		SettingUtil.setEntityValidateBeforeSave(entityValidateBeforeSave);
+		
+		// 7. db Object 생성 
+		boolean useObjectScript = ValueUtil.toBoolean(env.getProperty("elidom.initial.setup.script", SysConstants.FALSE_STRING));
+		if(useObjectScript) {
+			this.createDatabaseExtensions();
+		}
+		
+		// 8. 임시 도메인 생성
 		Domain emptyDomain = new Domain(INITIAL_TEMP_DOMAIN_NAME);
 		emptyDomain.setId(ValueUtil.toLong(env.getProperty(CoreConfigConstants.ELIDOM_INITIAL_DOMAIN_ID)));
 		emptyDomain.setSystemFlag(true);
 		emptyDomain.setSubdomain(INITIAL_TEMP_DOMAIN_NAME);
 		BeanUtil.get(IQueryManager.class).insert(emptyDomain);
 		Domain.setCurrentDomain(emptyDomain);
-
-		// 7. 속도를 위해 엔티티 저장 시 Validation Check를 할 지 여부를 설정한다. 
-		boolean entityValidateBeforeSave = ValueUtil.toBoolean(env.getProperty(CoreConfigConstants.DBIST_VALIDATE_BEFORE_SAVE, SysConstants.FALSE_STRING));
-		SettingUtil.setEntityValidateBeforeSave(entityValidateBeforeSave);
-		
-		// 8. db Object 생성 
-		boolean useObjectScript = ValueUtil.toBoolean(env.getProperty("elidom.initial.setup.script", SysConstants.FALSE_STRING));
-		if(useObjectScript) {
-			this.createDatabaseExtensions();
-		}
 		
 		// 9. Setup initial data
 		return this.initSeedData(initialParams);

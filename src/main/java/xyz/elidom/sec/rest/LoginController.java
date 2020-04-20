@@ -178,10 +178,10 @@ public class LoginController {
 		String sql = "select id, name, brand_name, description, subdomain from domains where id in (select domain_id from domain_users where user_id = :userId)";
 		
 		if(currentUser.getSuperUser()) {
-			sql += " union all select id, name, brand_name, description, subdomain from domains where system_flag = 1";
+			sql += " union all select id, name, brand_name, description, subdomain from domains where system_flag = :systemFlag";
 		}
 		
-		Map<String, Object> params = ValueUtil.newMap("userId", currentUser.getId());
+		Map<String, Object> params = ValueUtil.newMap("userId,systemFlag", currentUser.getId(), true);
 		return this.queryManager.selectListBySql(sql, params, Map.class, 0, 0);
 	}
 	
@@ -391,9 +391,9 @@ public class LoginController {
 		
 		// 1. subDomain 이 없을때  ( system domain 으로 route 용 url 일때 ) 
 		if(ValueUtil.isEqual(AnyValueUtil.getClientRequestSubDomain(req), "_ROOT_")) {
-			String qry = "SELECT * FROM DOMAINS WHERE ID in ( SELECT DOMAIN_ID FROM DOMAIN_USERS WHERE USER_ID = :userId ) AND SYSTEM_FLAG = 0";
+			String qry = "SELECT * FROM DOMAINS WHERE ID in (SELECT DOMAIN_ID FROM DOMAIN_USERS WHERE USER_ID = :userId) AND SYSTEM_FLAG = :systemFlag";
 
-			List<Domain> domainList = this.queryManager.selectListBySql(qry, ValueUtil.newMap("userId", currentUser.getId()), Domain.class, 0, 0);
+			List<Domain> domainList = this.queryManager.selectListBySql(qry, ValueUtil.newMap("userId,systemFlag", currentUser.getId(), false), Domain.class, 0, 0);
 			// 1.1. 사용자가 super user 이면 system domain 접근 권한 있음 
 			if(currentUser.getSuperUser()) domainList.add(currentDomain);
 			

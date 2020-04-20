@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -691,11 +689,11 @@ public class InitialSetupFunc {
 		if (null != queryManager.select(User.class, userId)) { throw ThrowUtil.newDataDuplicated("terms.label.user_id", userId); }
 
 		// 2. email 정규표현식으로 체크
-		Pattern emailPattern = Pattern.compile("[_0-9a-zA-Z-]+[_a-z0-9-.]{2,}@[a-z0-9-]{2,}(.[a-z0-9]{2,})*");
+		/*Pattern emailPattern = Pattern.compile("[_0-9a-zA-Z-]+[_a-z0-9-.]{2,}@[a-z0-9-]{2,}(.[a-z0-9]{2,})*");
 		Matcher matcher = emailPattern.matcher(email);
 		if (!matcher.matches()) {
 			AssertUtil.throwInvalidParams("terms.label.email", email);
-		}
+		}*/
 
 		// 3. email 중복 체크
 		if (null != User.getUserByEmail(email)) { throw ThrowUtil.newDataDuplicated("terms.label.user", email); }

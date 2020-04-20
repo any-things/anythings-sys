@@ -42,9 +42,11 @@ public class DomainUserController extends AbstractRestService {
 		sql.add("SELECT")
 		   .add("	DU.ID AS ID, D.ID AS DOMAIN_ID, D.NAME AS SITE_CD, D.BRAND_NAME AS SITE_NM, D.DESCRIPTION AS CENTER, DU.USER_ID AS USER_ID")
 		   .add("FROM")
-		   .add("	DOMAINS D, USERS U, DOMAIN_USERS DU")
+		   .add("	DOMAINS D")
+		   .add("		LEFT OUTER JOIN DOMAIN_USERS DU ON D.ID = DU.DOMAIN_ID")
+		   .add("		LEFT OUTER JOIN USERS U ON DU.USER_ID = U.ID")
 		   .add("WHERE")
-		   .add("	D.ID = DU.DOMAIN_ID(+) AND DU.USER_ID = U.ID AND U.ID = :userId")
+		   .add("	DU.USER_ID = :userId")
 		   .add("ORDER BY")
 		   .add("	D.ID ASC");
 		

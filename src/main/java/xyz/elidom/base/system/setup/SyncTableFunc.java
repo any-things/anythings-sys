@@ -62,6 +62,10 @@ public class SyncTableFunc {
 			// 2. sourceType 확인
 			// self 인 것만 ddl 처리 
 			String sourceType = (String)tableInfo.get("sourceType");
+			
+			if(sourceType == null) {
+				sourceType = (String)tableInfo.get("dataSourceType");
+			}
 
 			// 2.1. 현재는 기본 데이터 소스외의 엔티티는 자동으로 테이블 형상 관리를 지원 하지 않음.
 			if(ValueUtil.isEqualIgnoreCase(sourceType, DataSourceType.SELF) == false) {
