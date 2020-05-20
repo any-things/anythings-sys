@@ -52,7 +52,31 @@ public class AnyEntityUtil extends EntityUtil {
 	 * @return
 	 */
 	public static <T> T findEntityByIdWithLock(boolean exceptionWhenEmpty, Class<T> clazz, String id) {
-		T obj = BeanUtil.get(IQueryManager.class).selectWithLock(clazz, id);
+		Query condition = AnyOrmUtil.newConditionForExecution();
+		condition.addFilter("id", id);
+		T obj = BeanUtil.get(IQueryManager.class).selectByConditionWithLock(clazz, condition);
+		
+		if(obj == null) {
+			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), id);
+		} else {
+			return obj;
+		}
+	}
+	
+	/**
+	 * id로 락을 걸면서 엔티티 조회
+	 * 
+	 * @param exceptionWhenEmpty
+	 * @param clazz
+	 * @param id
+	 * @param selectFields
+	 * @return
+	 */
+	public static <T> T findEntityByIdWithLock(boolean exceptionWhenEmpty, Class<T> clazz, String id, String ... selectFields) {
+		Query condition = AnyOrmUtil.newConditionForExecution();
+		condition.addSelect(selectFields);
+		condition.addFilter("id", id);
+		T obj = BeanUtil.get(IQueryManager.class).selectByConditionWithLock(clazz, condition);
 		
 		if(obj == null) {
 			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), id);
