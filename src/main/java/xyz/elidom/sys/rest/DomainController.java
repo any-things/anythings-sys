@@ -3,6 +3,7 @@ package xyz.elidom.sys.rest;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import xyz.elidom.core.rest.CodeController;
 import xyz.elidom.dbist.dml.Order;
 import xyz.elidom.dbist.dml.Page;
 import xyz.elidom.dbist.dml.Query;
+import xyz.elidom.msg.rest.MessageController;
 import xyz.elidom.msg.rest.TerminologyController;
 import xyz.elidom.orm.OrmConstants;
 import xyz.elidom.orm.system.annotation.service.ApiDesc;
@@ -33,7 +35,6 @@ import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.entity.User;
 import xyz.elidom.sys.system.service.AbstractRestService;
 import xyz.elidom.sys.util.AssertUtil;
-import xyz.elidom.sys.util.SettingUtil;
 import xyz.elidom.sys.util.ThrowUtil;
 import xyz.elidom.util.BeanUtil;
 import xyz.elidom.util.ValueUtil;
@@ -50,6 +51,8 @@ public class DomainController extends AbstractRestService {
 	 */
 	private static final String DEFAULT_SORT_COND = "[{\"field\": \"name\", \"ascending\": true}]";
 	
+	@Value("${redis.was.urls}")
+	private String[] redisWasUrls;
 	/**
 	 * 캐쉬 리셋 요청 URL 
 	 */
@@ -212,16 +215,13 @@ public class DomainController extends AbstractRestService {
 	}
 	
 	public boolean requestClearCache(String targetResource) {
-		String serversStr = SettingUtil.getValue(Domain.currentDomainId(), "xyz.elings.redis.was.servers");
-		String[] serverAddrs = serversStr.split(",");
-		
 		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 		factory.setConnectTimeout(3000);
 		factory.setReadTimeout(3000);
 		
 		RestTemplate rest = new RestTemplate(factory);
 
-		for(String serverAddr : serverAddrs) {
+		for(String serverAddr : this.redisWasUrls) {
 			rest.put(this.clearCacheReqUrl, null, ValueUtil.newMap("serverAddr,target_resource", serverAddr,targetResource));
 		}
 		
@@ -249,6 +249,8 @@ public class DomainController extends AbstractRestService {
 			BeanUtil.get(TerminologyController.class).clearCache();
 		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "settings")) { // 설정 
 			BeanUtil.get(SettingController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "messages")) { // 메시지  
+			BeanUtil.get(MessageController.class).clearCache();
 		}
 		return true;
 	}
