@@ -46,6 +46,7 @@ import xyz.elidom.orm.util.DdlUtil;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.entity.User;
+import xyz.elidom.sys.rest.DomainController;
 import xyz.elidom.sys.system.service.AbstractRestService;
 import xyz.elidom.sys.util.AssertUtil;
 import xyz.elidom.sys.util.MessageUtil;
@@ -357,12 +358,16 @@ public class ResourceController extends AbstractRestService {
 	}
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean resourceClearCache() {
+		return BeanUtil.get(DomainController.class).requestClearCache("resource");
+	}
+
 	public boolean clearCache() {
 		ResourceController resourceCtrl = BeanUtil.get(ResourceController.class);
 		resourceCtrl.clearResourceCache();
 		resourceCtrl.clearResourceColumnCache();
 		return true;
-	}
+	} 
 	
 	@ApiDesc(description = "Find Extends Entity By Name")
 	@Cacheable(cacheNames = "Resource", key = "'Resource-custom-' + #name")

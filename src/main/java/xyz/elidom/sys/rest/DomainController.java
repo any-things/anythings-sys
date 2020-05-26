@@ -3,10 +3,12 @@ package xyz.elidom.sys.rest;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import xyz.elidom.base.rest.MenuController;
+import xyz.elidom.base.rest.ResourceController;
+import xyz.elidom.core.rest.CodeController;
 import xyz.elidom.dbist.dml.Order;
 import xyz.elidom.dbist.dml.Page;
 import xyz.elidom.dbist.dml.Query;
+import xyz.elidom.msg.rest.MessageController;
+import xyz.elidom.msg.rest.TerminologyController;
 import xyz.elidom.orm.OrmConstants;
 import xyz.elidom.orm.system.annotation.service.ApiDesc;
 import xyz.elidom.orm.system.annotation.service.ServiceDesc;
@@ -42,6 +50,13 @@ public class DomainController extends AbstractRestService {
 	 * 기본 소팅 조건 - '[{\"field\": \"name\", \"ascending\": true}]'
 	 */
 	private static final String DEFAULT_SORT_COND = "[{\"field\": \"name\", \"ascending\": true}]";
+	
+	@Value("${redis.was.urls}")
+	private String[] redisWasUrls;
+	/**
+	 * 캐쉬 리셋 요청 URL 
+	 */
+	private String clearCacheReqUrl = "http://{serverAddr}/rest/domains/clear_cache/{target_resource}";
 
 	@Override
 	protected Class<?> entityClass() {
@@ -190,9 +205,55 @@ public class DomainController extends AbstractRestService {
 	}
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean domainClearCache() {
+		return BeanUtil.get(DomainController.class).requestClearCache("domain");
+	}
+	
 	@CacheEvict(cacheNames = "Domain", allEntries = true)
 	public boolean clearCache() {
 		return true;
 	}
+	
+	public boolean requestClearCache(String targetResource) {
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		factory.setConnectTimeout(3000);
+		factory.setReadTimeout(3000);
+		
+		RestTemplate rest = new RestTemplate(factory);
+
+		for(String serverAddr : this.redisWasUrls) {
+			rest.put(this.clearCacheReqUrl, null, ValueUtil.newMap("serverAddr,target_resource", serverAddr,targetResource));
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * WAS 가 클러스터 구성일때 캐쉬 리셋 메시지를 수신할 부분 
+	 * 설정 : xyz.elings.redis.was.servers
+	 * permit Url
+	 * @param target_resource
+	 * @return 
+	 */
+	@RequestMapping(value = "/clear_cache/{target_resource}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean clearTargetCache(@PathVariable("target_resource") String targetResource) {
+		if(ValueUtil.isEqualIgnoreCase(targetResource, "domain")) { // 도메인 
+			BeanUtil.get(DomainController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "menu")) { // 메뉴 
+			BeanUtil.get(MenuController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "resource")) { // 리소스 
+			BeanUtil.get(ResourceController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "code")) { // 코드 
+			BeanUtil.get(CodeController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "terminology")) { // 용어 
+			BeanUtil.get(TerminologyController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "settings")) { // 설정 
+			BeanUtil.get(SettingController.class).clearCache();
+		} else if(ValueUtil.isEqualIgnoreCase(targetResource, "messages")) { // 메시지  
+			BeanUtil.get(MessageController.class).clearCache();
+		}
+		return true;
+	}
+	
 	
 }

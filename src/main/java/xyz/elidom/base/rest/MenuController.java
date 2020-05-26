@@ -52,6 +52,7 @@ import xyz.elidom.sec.rest.PermissionController;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.entity.Domain;
 import xyz.elidom.sys.entity.User;
+import xyz.elidom.sys.rest.DomainController;
 import xyz.elidom.sys.system.engine.ITemplateEngine;
 import xyz.elidom.sys.system.service.AbstractRestService;
 import xyz.elidom.sys.util.AssertUtil;
@@ -773,10 +774,14 @@ public class MenuController extends AbstractRestService {
 	@RequestMapping(value = "/clear_menu_param_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@CacheEvict(cacheNames = "MenuParam", allEntries = true)
 	public boolean clearMenuParamsCache() {
-		return true;
+		return true; 
 	}
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean menuClearCache() {
+		return BeanUtil.get(DomainController.class).requestClearCache("menu");
+	}
+
 	public boolean clearCache() {
 		MenuController menuCtrl = BeanUtil.get(MenuController.class);
 		menuCtrl.clearMenuCache();

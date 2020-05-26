@@ -23,6 +23,7 @@ import xyz.elidom.msg.entity.Terminology;
 import xyz.elidom.orm.system.annotation.service.ApiDesc;
 import xyz.elidom.orm.system.annotation.service.ServiceDesc;
 import xyz.elidom.sys.entity.Domain;
+import xyz.elidom.sys.rest.DomainController;
 import xyz.elidom.sys.system.service.AbstractRestService;
 import xyz.elidom.sys.util.ValueUtil;
 import xyz.elidom.util.BeanUtil;
@@ -149,6 +150,10 @@ public class TerminologyController extends AbstractRestService {
 	}
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean terminologyClearCache() {
+		return BeanUtil.get(DomainController.class).requestClearCache("terminology");
+	}
+
 	@CacheEvict(cacheNames = "Terminology", allEntries = true)
 	public boolean clearCache() {
 		return true;
@@ -168,7 +173,7 @@ public class TerminologyController extends AbstractRestService {
 	public Map<String, Object> resource(Long domainId, String locale) {
 		Map<String, Object> termsMap = new HashMap<String, Object>();
 		List<Terminology> terms = this.queryManager.selectListBySql(TERM_QUERY, ValueUtil.newMap("domainId,locale", domainId, locale), Terminology.class, 0, 0);
-
+ 
 		for (Terminology term : terms) {
 			termsMap.put(term.getCategory() + "." + term.getName(), term.getDisplay());
 		}

@@ -24,6 +24,7 @@ import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.entity.Setting;
 import xyz.elidom.sys.system.service.AbstractRestService;
 import xyz.elidom.sys.util.AssertUtil;
+import xyz.elidom.util.BeanUtil;
 
 @RestController
 @Transactional
@@ -113,6 +114,10 @@ public class SettingController extends AbstractRestService {
 	}
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean settingsClearCache() {
+		return BeanUtil.get(DomainController.class).requestClearCache("settings");
+	}
+
 	@ApiDesc(description = "Clear Settings Cache")	
 	@CacheEvict(cacheNames = "Setting", allEntries = true)
 	public boolean clearCache() {
@@ -123,7 +128,7 @@ public class SettingController extends AbstractRestService {
 	 * 수정1. domainId, name으로 설정값 조회 API 추가
 	 * 
 	 * @param domainId
-	 * @param name
+	 * @param name 
 	 * @return
 	 */
 	@Cacheable(cacheNames="Setting", key="#domainId + '-' + #name")
