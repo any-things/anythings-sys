@@ -29,6 +29,7 @@ import xyz.elidom.orm.system.annotation.service.ApiDesc;
 import xyz.elidom.orm.system.annotation.service.ServiceDesc;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.entity.Domain;
+import xyz.elidom.sys.rest.DomainController;
 import xyz.elidom.sys.system.service.AbstractRestService;
 import xyz.elidom.sys.util.AssertUtil;
 import xyz.elidom.util.BeanUtil;
@@ -171,9 +172,14 @@ public class CodeController extends AbstractRestService {
 	@CacheEvict(cacheNames="CommonCode", allEntries=true)
 	public Boolean multipleUpdateSubCodes(@RequestBody List<CodeDetail> commonDetailCodeList) {
 		return this.cudMultipleData(CodeDetail.class, commonDetailCodeList);
-	}
+	} 
 	
 	@RequestMapping(value = "/clear_cache", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean codeClearCache() {
+		return BeanUtil.get(DomainController.class).requestClearCache("code");
+	}
+
+	
 	@ApiDesc(description = "Clear CommonCode Cache")	
 	@CacheEvict(cacheNames = "CommonCode", allEntries = true)
 	public boolean clearCache() {
