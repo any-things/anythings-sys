@@ -205,7 +205,7 @@ public class AnyEntityUtil extends EntityUtil {
 		T obj = withLock ? queryMgr.selectByConditionWithLock(clazz, condition) : queryMgr.selectByCondition(clazz, condition);
 		
 		if(obj == null && exceptionWhenEmpty) {
-			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName());
+			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getSimpleName());
 		}
 
 		return obj;
