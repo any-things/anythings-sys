@@ -84,6 +84,10 @@ public class AnyConstants extends BaseConstants {
 	 */
 	public static final String ONE_STRING = "1";
 	/**
+	 * 문자열 2
+	 */
+	public static final String TWO_STRING = "2";
+	/**
 	 * 문자열 -1
 	 */
 	public static final String MINUS_ONE_STRING = "-1";
