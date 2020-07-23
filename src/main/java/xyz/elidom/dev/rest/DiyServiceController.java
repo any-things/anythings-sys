@@ -227,7 +227,8 @@ public class DiyServiceController extends AbstractRestService {
 		String queryStr = ValueUtil.toString(params.get("query"));
 		List<Map> paramList = super.getJsonParser().parse(queryStr, List.class);
 		Map<String, Object> input = new HashMap<String, Object>();
-		if(!paramList.isEmpty()) {
+		
+		if(ValueUtil.isNotEmpty(paramList)) {
 			for(Map data : paramList) {
 				input.put(data.get("name").toString(), data.get("value"));
 			}
