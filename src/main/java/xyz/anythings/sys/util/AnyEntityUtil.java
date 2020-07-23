@@ -64,7 +64,7 @@ public class AnyEntityUtil extends EntityUtil {
 	}
 	
 	/**
-	 * id로 락을 걸면서 엔티티 조회
+	 * id로 락을 걸면서 selectFields 대상으로만 엔티티 조회
 	 * 
 	 * @param exceptionWhenEmpty
 	 * @param clazz
@@ -75,6 +75,28 @@ public class AnyEntityUtil extends EntityUtil {
 	public static <T> T findEntityByIdWithLock(boolean exceptionWhenEmpty, Class<T> clazz, String id, String ... selectFields) {
 		Query condition = AnyOrmUtil.newConditionForExecution();
 		condition.addSelect(selectFields);
+		condition.addFilter("id", id);
+		T obj = BeanUtil.get(IQueryManager.class).selectByConditionWithLock(clazz, condition);
+		
+		if(obj == null) {
+			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), id);
+		} else {
+			return obj;
+		}
+	}
+	
+	/**
+	 * id로 락을 걸면서 unselectFields를 제외한 필드 대상으로만 엔티티 조회
+	 * 
+	 * @param exceptionWhenEmpty
+	 * @param clazz
+	 * @param id
+	 * @param unselectFields
+	 * @return
+	 */
+	public static <T> T findEntityByIdByUnselectedWithLock(boolean exceptionWhenEmpty, Class<T> clazz, String id, String ... unselectFields) {
+		Query condition = AnyOrmUtil.newConditionForExecution();
+		condition.addUnselect(unselectFields);
 		condition.addFilter("id", id);
 		T obj = BeanUtil.get(IQueryManager.class).selectByConditionWithLock(clazz, condition);
 		
