@@ -9,6 +9,10 @@ import java.util.Map;
  */
 public class PrintEvent extends SysEvent {
 	/**
+	 * 작업 유형 - DAS / DPS / RTN ...
+	 */
+	private String jobType;
+	/**
 	 * 프린터 ID
 	 */
 	private String printerId;
@@ -39,12 +43,14 @@ public class PrintEvent extends SysEvent {
 	 * 생성자 1
 	 * 
 	 * @param domainId 도메인 ID
+	 * @param jobType 작업 유형
 	 * @param printerId 프린터 ID
 	 * @param printTemplate 인쇄 템플릿 (커스텀 템플릿) 명
 	 * @param templateParams 템플릿 엔진에 태울 인쇄 템플릿 파라미터
 	 */
-	public PrintEvent(Long domainId, String printerId, String printTemplate, Map<String, Object> templateParams) {
+	public PrintEvent(Long domainId, String jobType, String printerId, String printTemplate, Map<String, Object> templateParams) {
 		this.domainId = domainId;
+		this.jobType = jobType;
 		this.printTemplate = printTemplate;
 		this.printerId = printerId;
 		this.templateParams = templateParams;
@@ -54,13 +60,14 @@ public class PrintEvent extends SysEvent {
 	 * 생성자 2
 	 * 
 	 * @param domainId 도메인 ID
+	 * @param jobType 작업 유형
 	 * @param printType 인쇄 유형 
 	 * @param printerId 프린터 ID
 	 * @param printTemplate 인쇄 템플릿 (커스텀 템플릿) 명
 	 * @param templateParams 템플릿 엔진에 태울 인쇄 템플릿 파라미터 
 	 * @param isSyncMode 동기 처리할 지 비동기 처리할 지 여부
 	 */
-	public PrintEvent(Long domainId, String printType, String printerId, String printTemplate, Map<String, Object> templateParams, boolean isSyncMode) {
+	public PrintEvent(Long domainId, String jobType, String printType, String printerId, String printTemplate, Map<String, Object> templateParams, boolean isSyncMode) {
 		this.domainId = domainId;
 		this.printType = printType;
 		this.printTemplate = printTemplate;
@@ -69,6 +76,14 @@ public class PrintEvent extends SysEvent {
 		this.isSyncMode = isSyncMode;
 	}
 	
+	public String getJobType() {
+		return jobType;
+	}
+
+	public void setJobType(String jobType) {
+		this.jobType = jobType;
+	}
+
 	public String getPrintTemplate() {
 		return printTemplate;
 	}
