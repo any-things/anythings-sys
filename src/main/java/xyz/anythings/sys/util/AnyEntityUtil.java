@@ -209,7 +209,7 @@ public class AnyEntityUtil extends EntityUtil {
 	public static <T> T findEntityBy(Long domainId, boolean exceptionWhenEmpty, boolean withLock, Class<T> clazz, String selectFields, String fieldNames, Object ... fieldValues) {
 		Query condition = AnyOrmUtil.newConditionForExecution(domainId);
 
-		if(ValueUtil.isNotEmpty(selectFields)) {
+		if(ValueUtil.isNotEmpty(selectFields) && ValueUtil.isNotEqual(selectFields, "*")) {
 			condition.addSelect(selectFields.split(SysConstants.COMMA));
 		}
 
