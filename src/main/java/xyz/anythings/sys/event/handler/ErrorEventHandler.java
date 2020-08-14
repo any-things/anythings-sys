@@ -1,9 +1,8 @@
 package xyz.anythings.sys.event.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import xyz.anythings.sys.event.model.ErrorEvent;
 import xyz.anythings.sys.service.AsyncExceptionHandler;
@@ -27,7 +26,7 @@ public class ErrorEventHandler {
 	 * 
 	 * @param errorEvent
 	 */
-	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION, classes = ErrorEvent.class)
+	@EventListener(classes = ErrorEvent.class)
 	public void handleErrorEvent(ErrorEvent errorEvent) {
 		this.asyncErrorHandler.handleException(errorEvent);
 	}
