@@ -178,7 +178,7 @@ public class LoginController {
 		String sql = "select id, name, brand_name, description, subdomain from domains where id in (select domain_id from domain_users where user_id = :userId)";
 		
 		if(currentUser.getSuperUser()) {
-			sql += " union all select id, name, brand_name, description, subdomain from domains where system_flag = :systemFlag";
+			sql = "select id, name, brand_name, description, subdomain from domains"; 
 		}
 		
 		Map<String, Object> params = ValueUtil.newMap("userId,systemFlag", currentUser.getId(), true);
