@@ -252,7 +252,7 @@ public class DiyServiceController extends AbstractRestService {
 			inputMap = new HashMap<String, Object>();
 		}
 		
-		inputMap.put("domain_id", Domain.currentDomain().getId());
+		inputMap.put("domain_id", Domain.currentDomainId());
 		Object result = this.evalScript(name, inputMap);
 		
 		if(result == null) {

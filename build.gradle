@@ -36,4 +36,5 @@ ext {
 dependencies {
 	compile("com.hatiolab:elings-base:${elingsBaseVersion}") {changing = true}
 	compile("com.hatiolab:elings-dev:${elingsDevVersion}") {changing = true}
+	compile("com.hatiolab:elings-job:${elingsDevVersion}") {changing = true}
 }
