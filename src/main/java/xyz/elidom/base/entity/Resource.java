@@ -450,7 +450,7 @@ public class Resource extends ElidomStampHook {
 	 */
 	public List<ResourceColumn> resourceColumns() {
 		if (ValueUtil.isEmpty(this.items)) {
-			String sql = "SELECT * FROM entity_columns rc where rc.entity_id = :resourceId order by rank";
+			String sql = "SELECT * FROM entity_columns where entity_id = :resourceId order by rank";
 			this.items = BeanUtil.get(IQueryManager.class).selectListBySql(sql, ValueUtil.newMap("resourceId", this.id), ResourceColumn.class, 0, 0);
 		}
 
@@ -463,7 +463,7 @@ public class Resource extends ElidomStampHook {
 	 * @return
 	 */
 	public List<ResourceColumn> resourceColumnsByListRank() {
-		String sql = "SELECT * FROM entity_columns rc where rc.entity_id = :resourceId and grid_rank > 0 order by grid_rank";
+		String sql = "SELECT * FROM entity_columns where entity_id = :resourceId and grid_rank > 0 order by grid_rank";
 		return BeanUtil.get(IQueryManager.class).selectListBySql(sql, ValueUtil.newMap("resourceId", this.id), ResourceColumn.class, 0, 0);
 	}
 
