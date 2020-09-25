@@ -122,7 +122,7 @@ public class AnyEntityUtil extends EntityUtil {
 		query.addFilter(codeName, codeValue);
 		T obj = BeanUtil.get(IQueryManager.class).selectByCondition(clazz, query);
 		
-		if(obj == null) {
+		if(obj == null && exceptionWhenEmpty ) {
 			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), codeValue);
 		} else {
 			return obj;
