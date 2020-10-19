@@ -266,20 +266,21 @@ public class SeedController implements InitialSetup {
 	}
 	
 	/**
+	 * Seed 데이터 셋업
 	 * 
 	 * @param initialParams
 	 * @return
 	 */
 	boolean initSeedData(Map<String, Object> initialParams) {
 		try {
-			// 1. 전체 classpath 의 스크립트 불러오기 
+			// 1. 전체 classpath의 스크립트 불러오기 
 			List<Resource> mainScriptResources = this.getSeedScriptResources(true, null);
 			List<Resource> subScriptResources = this.getSeedScriptResources(true, mainScriptResources);
 			
 			// 2. project 모듈 순서 리스트 
 			List<String> projectOrderList = this.getProjectOrderdList();
 			
-			// 3. 모듈과 resource 합
+			// 3. 모듈과 resource 병합
 			List<Resource> executeResources = this.mergeScriptResource(projectOrderList, mainScriptResources, subScriptResources);
 			
 			// 4. initial setup
@@ -341,15 +342,15 @@ public class SeedController implements InitialSetup {
 		}
 	}
 	
-	
 	/**
-	 * db 하위 폴더의 리소스 script 파일을 검색 한다.
+	 * db 하위 폴더의 리소스 script 파일을 검색한다.
+	 * 
 	 * @param isMainApps
 	 * @param mainScriptResources
 	 * @return
 	 * @throws Exception
 	 */
-	private List<Resource> getSeedScriptResources(boolean isMainApps, List<Resource> mainScriptResources) throws Exception{
+	private List<Resource> getSeedScriptResources(boolean isMainApps, List<Resource> mainScriptResources) throws Exception {
 		String searchPattern = "classpath*:/seeds/**/*.json";
 		if(isMainApps) searchPattern = "classpath:/seeds/**/*.json";
 
@@ -358,13 +359,14 @@ public class SeedController implements InitialSetup {
 	}
 	
 	/**
-	 * db 하위 폴더의 리소스 script 파일을 검색 한다.
+	 * db 하위 폴더의 리소스 script 파일을 검색한다.
+	 * 
 	 * @param isMainApps
 	 * @param mainScriptResources
 	 * @return
 	 * @throws Exception
 	 */
-	private List<Resource> getDBScriptResources(boolean isMainApps, List<Resource> mainScriptResources) throws Exception{
+	private List<Resource> getDBScriptResources(boolean isMainApps, List<Resource> mainScriptResources) throws Exception {
 		String dbType = this.queryManager.getDbType().toLowerCase();
 		
 		String searchPattern = "classpath*:/db/%s/**/*.script";
@@ -376,7 +378,8 @@ public class SeedController implements InitialSetup {
 	}
 	
 	/**
-	 * main 프로젝트와 서브 프로젝트의 스크립트를 머지 한다. 
+	 * main 프로젝트와 서브 프로젝트의 스크립트를 머지한다.
+	 * 
 	 * @param projectOrderList
 	 * @param mainScriptResources
 	 * @param subScriptResources
@@ -416,24 +419,25 @@ public class SeedController implements InitialSetup {
 	}
 
 	/**
-	 * 전체 프로젝트의 ( dependency jar 도 포함 ) script 파일을 검색 한다. 
+	 * 전체 프로젝트의 ( dependency jar 도 포함 ) script 파일을 검색한다.
+	 * 
 	 * @param mainScriptResources
 	 * @return
 	 * @throws Exception
 	 */
-	private List<Resource> getScriptResources(String searchPattern, List<Resource> mainScriptResources) throws Exception{
+	private List<Resource> getScriptResources(String searchPattern, List<Resource> mainScriptResources) throws Exception {
 		ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		Resource[] resources = resolver.getResources(searchPattern);
 		List<Resource> resourceList = new ArrayList<Resource>();
 		
 		if(mainScriptResources == null) {
-			for(Resource resource : resources ) {
+			for(Resource resource : resources) {
 				if(resource == null || !resource.exists()) continue;
 				resourceList.add(resource);
 			}
-		} else {
 			
-			for(Resource resource : resources ) {
+		} else {
+			for(Resource resource : resources) {
 				if(resource == null || !resource.exists()) continue;
 				String fullPath = resource.getURL().getPath();
 				
@@ -458,7 +462,7 @@ public class SeedController implements InitialSetup {
 	 *         1 ~ = sub Project
 	 * @return
 	 */
-	private List<String> getProjectOrderdList(){
+	private List<String> getProjectOrderdList() {
 		ModuleConfigSet configSet = BeanUtil.get(ModuleConfigSet.class);
 		List<IModuleProperties> modules = configSet.allOrderedModules();
 		List<String> projectOrder = new ArrayList<String> ();
