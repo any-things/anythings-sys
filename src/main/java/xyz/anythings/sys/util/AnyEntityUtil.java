@@ -88,6 +88,29 @@ public class AnyEntityUtil extends EntityUtil {
 	/**
 	 * id로 락을 걸면서 unselectFields를 제외한 필드 대상으로만 엔티티 조회
 	 * 
+	 * @param domainId
+	 * @param exceptionWhenEmpty
+	 * @param clazz
+	 * @param id
+	 * @param unselectFields
+	 * @return
+	 */
+	public static <T> T findEntityByIdByUnselectedWithLock(Long domainId, boolean exceptionWhenEmpty, Class<T> clazz, String id, String ... unselectFields) {
+		Query condition = AnyOrmUtil.newConditionForExecution(domainId);
+		condition.addUnselect(unselectFields);
+		condition.addFilter("id", id);
+		T obj = BeanUtil.get(IQueryManager.class).selectByConditionWithLock(clazz, condition);
+		
+		if(obj == null) {
+			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), id);
+		} else {
+			return obj;
+		}
+	}
+	
+	/**
+	 * id로 락을 걸면서 unselectFields를 제외한 필드 대상으로만 엔티티 조회
+	 * 
 	 * @param exceptionWhenEmpty
 	 * @param clazz
 	 * @param id
