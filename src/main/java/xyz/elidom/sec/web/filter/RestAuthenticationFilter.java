@@ -20,24 +20,31 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import xyz.elidom.exception.server.ElidomServiceException;
+import xyz.elidom.orm.IQueryManager;
 import xyz.elidom.orm.OrmConstants;
 import xyz.elidom.sec.SecConfigConstants;
+import xyz.elidom.sec.SecConstants;
+import xyz.elidom.sec.rest.LoginController;
 import xyz.elidom.sec.rest.PermitUrlController;
 import xyz.elidom.sec.util.SecurityUtil;
 import xyz.elidom.sys.SysConfigConstants;
 import xyz.elidom.sys.SysConstants;
 import xyz.elidom.sys.SysMessageConstants;
 import xyz.elidom.sys.entity.Domain;
+import xyz.elidom.sys.entity.User;
 import xyz.elidom.sys.system.service.params.ErrorOutput;
 import xyz.elidom.sys.util.EnvUtil;
 import xyz.elidom.sys.util.MessageUtil;
@@ -171,6 +178,27 @@ public class RestAuthenticationFilter extends AbstractSecurityWebApplicationInit
 			if (SecurityUtil.isAnonymous() && !this.isPermitUri(uri, this.getAllPermitUrls(currentDomain.getId()))) {
 				// Get방식이 아니거나, Read Permit URL에 포함되어 있지 않을 경우 인증 확인.
 				if (!(RequestMethod.GET.name().equalsIgnoreCase(method) && this.isPermitUri(uri, this.getReadPermitUrls(currentDomain.getId())))) {
+					
+					// HttpSender를 통한 JSON 호출 시, 인증 실행.
+					String authType = request.getHeader(SecConstants.AUTH_TYPE);
+					String authKey = request.getHeader(SecConstants.AUTH_KEY);
+
+					/**
+					 * Type에 따른 인증 실행
+					 */
+					if (ValueUtil.isNotEmpty(authType) && ValueUtil.isNotEmpty(authKey)) {
+						switch (authType) {
+						case SecConstants.AUTH_TYPE_JSON :
+							this.doJsonAuth(authKey, request, response);
+							break;
+
+						case SecConstants.AUTH_TYPE_TOKEN :
+							this.doTokenAuth(authKey);
+							break;
+						}
+					}
+					
+					
 					// 인증되지 않았을 경우 Message 처리
 					if (SecurityUtil.isAnonymous() || SecurityUtil.getAuthentication() == null) {
 						this.processUnauthorized(request, response);
@@ -181,7 +209,7 @@ public class RestAuthenticationFilter extends AbstractSecurityWebApplicationInit
 
 			Object locale = ValueUtil.checkValue(request.getHeader(HEADER_LOCALE), SettingUtil.getValue(currentDomain.getId(), SysConfigConstants.DEFAULT_LOCALE, SysConstants.EN_US));
 			SessionUtil.setAttribute(SysConstants.LOCALE, locale);
-		}
+		}	
 		
 		chain.doFilter(req, res);
 	}
@@ -271,5 +299,41 @@ public class RestAuthenticationFilter extends AbstractSecurityWebApplicationInit
 	@Override
 	public void destroy() {
 	}
+	
+	
+	/**
+	 * Json 호출에 대한 인증
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	private void doJsonAuth(String authKey, HttpServletRequest request, HttpServletResponse response) {
+		String authJsonValue = new String(Base64.decodeBase64(authKey.getBytes()));
+		User user = FormatUtil.underScoreJsonToObject(authJsonValue, User.class);
 
+		String userId = ValueUtil.checkValue(user.getLogin(), user.getEmail());
+		String password = user.getEncryptedPassword();
+
+		Authentication authResult = BeanUtil.get(LoginController.class).doAuthenticate(userId, password);
+		SecurityContextHolder.getContext().setAuthentication(authResult);
+		SessionUtil.setAttribute(SecConstants.AUTH_TYPE, SecConstants.AUTH_TYPE_JSON);
+	}
+
+	/**
+	 * Token 방식에 대한 인증
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	private void doTokenAuth(String authKey) {
+		User user = BeanUtil.get(IQueryManager.class).select(User.class, authKey);
+		if (ValueUtil.isNotEmpty(user)) {
+			Authentication authResult = BeanUtil.get(LoginController.class).doAuthenticate(user.getId(), user.getEncryptedPassword());
+			// 인증정보 Context에 저장.
+			SecurityContextHolder.getContext().setAuthentication(authResult);
+			SessionUtil.setAttribute(SecConstants.AUTH_TYPE, SecConstants.AUTH_TYPE_TOKEN);
+		}
+	}
 }
