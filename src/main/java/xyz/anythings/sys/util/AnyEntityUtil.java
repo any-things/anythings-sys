@@ -36,7 +36,7 @@ public class AnyEntityUtil extends EntityUtil {
 	public static <T> T findEntityById(boolean exceptionWhenEmpty, Class<T> clazz, String id) {
 		T obj = BeanUtil.get(IQueryManager.class).select(clazz, id);
 		
-		if(obj == null) {
+		if(obj == null && exceptionWhenEmpty) {
 			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), id);
 		} else {
 			return obj;
