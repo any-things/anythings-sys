@@ -104,4 +104,20 @@ public class AnyDateUtil extends DateUtil{
 		c.set(Calendar.SECOND,seconds);
 		return c.getTime();
 	}
+
+	public static String getYear(Date date) {
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(date);
+		return ValueUtil.toString(c.get(Calendar.YEAR));
+	}
+	public static String getMonth(Date date) {
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(date);
+		return ValueUtil.toString(c.get(Calendar.MONTH));
+	}
+	public static String getDay(Date date) {
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(date);
+		return ValueUtil.toString(c.get(Calendar.DAY_OF_MONTH));
+	}
 }
