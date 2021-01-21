@@ -23,6 +23,20 @@ public class AnyDateUtil extends DateUtil{
 	}
 	
 	/**
+	 * date + hour
+	 * @param date
+	 * @param addHours
+	 * @return
+	 */
+	public static Date addHours(Date date, int addHours) {
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(date);
+		c.add(Calendar.HOUR, addHours);
+		return c.getTime();
+	}
+
+	
+	/**
 	 * currentDate + min
 	 * @param addMinutes
 	 * @return
@@ -105,16 +119,31 @@ public class AnyDateUtil extends DateUtil{
 		return c.getTime();
 	}
 
+	/**
+	 * Date to Year
+	 * @param date
+	 * @return
+	 */
 	public static String getYear(Date date) {
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(date);
 		return ValueUtil.toString(c.get(Calendar.YEAR));
 	}
+	/**
+	 * Date to Month
+	 * @param date
+	 * @return
+	 */
 	public static String getMonth(Date date) {
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(date);
 		return ValueUtil.toString(c.get(Calendar.MONTH));
 	}
+	/**
+	 * Date to day 
+	 * @param date
+	 * @return
+	 */
 	public static String getDay(Date date) {
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(date);
