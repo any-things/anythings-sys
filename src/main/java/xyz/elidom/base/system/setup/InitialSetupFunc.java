@@ -139,9 +139,14 @@ public class InitialSetupFunc {
 
 		// 2. Domain, User 정보 생성
 		this.createDomainUserData();
-
-		// 3. Local Seed 파일로 부터 Seed 데이터 생성
-		this.createDataBySeedFiles(seedList);
+		
+		if (SetupUtil.initialSetupUseSeedServer()) {
+			// 3. Seed Server로 부터 Seed 템플릿 데이터를 받아 Seed 데이터 생성
+			this.createDataBySeedServer();
+		} else {
+			// 4. Local Seed 파일로 부터 Seed 데이터 생성
+			this.createDataBySeedFiles(seedList);
+		}
 
 		// 4. Setting 정보 Root Path를 Storage Root 값으로 업데이트
 		this.updateStorageRootSetting();
@@ -412,6 +417,11 @@ public class InitialSetupFunc {
 			String content = rest.getForObject(seedDataUrl, String.class);
 
 			if (table != null) {
+				// user 중복 문제로 인해 삭제 후진행
+				if(ValueUtil.isEqual(entityClass, User.class)) {
+					this.queryManager.deleteByCondition(entityClass, ValueUtil.newMap(""));
+				}
+				
 				List<Field> fieldList = ClassUtil.getAllFields(new ArrayList<Field>(), entityClass);
 				List<?> dataList = this.parseData(entityClass, table, fieldList, content);
 				if (dataList != null && !dataList.isEmpty()) {
