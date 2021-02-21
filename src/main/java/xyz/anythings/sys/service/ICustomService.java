@@ -18,5 +18,24 @@ public interface ICustomService {
 	 * @return
 	 */
 	public Object doCustomService(Long domainId, String diyServiceName, Map<String, Object> parameters);
-
+	
+	/**
+	 * 별도 트랜잭션으로 커스텀 서비스를 동기 모드로 실행
+	 * 
+	 * @param domainId
+	 * @param diyServiceName
+	 * @param parameters
+	 * @return
+	 */
+	public Object doCustomServiceByNewTransaction(Long domainId, String diyServiceName, Map<String, Object> parameters);
+	
+	/**
+	 * 비동기 모드(별도 트랜잭션)로 커스텀 서비스를 실행
+	 * 
+	 * @param domainId
+	 * @param diyServiceName
+	 * @param parameters
+	 */
+	public void doCustomServiceByAsync(Long domainId, String diyServiceName, Map<String, Object> parameters);
+	
 }
