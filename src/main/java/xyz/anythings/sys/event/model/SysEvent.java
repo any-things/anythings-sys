@@ -38,7 +38,7 @@ public class SysEvent {
 	/**
 	 * 이벤트 타겟 
 	 */
-	protected String eventTarget;	
+	protected String eventTarget;
 	/**
 	 * 다음 이벤트를 계속 발생 할 건지 여부, DEFAULT => false
 	 */
