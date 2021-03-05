@@ -31,7 +31,7 @@ public class AnyDateUtil extends DateUtil{
 	public static Date addHours(Date date, int addHours) {
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(date);
-		c.add(Calendar.HOUR, addHours);
+		c.add(Calendar.HOUR_OF_DAY, addHours);
 		return c.getTime();
 	}
 
