@@ -7,23 +7,36 @@ import java.util.Date;
 import xyz.elidom.util.DateUtil;
 import xyz.elidom.util.ValueUtil;
 
-public class AnyDateUtil extends DateUtil{
+/**
+ * DateUtil 확장 유틸리티
+ * 
+ * @author shortstop
+ */
+public class AnyDateUtil extends DateUtil {
 
+	/**
+	 * 시간 포맷
+	 */
 	private static String DEFAULT_HOUR_FORMAT = "HH";
+	/**
+	 * 분 포맷
+	 */
 	private static String DEFAULT_MIN_FORMAT = "mm";
 
 	/**
 	 * date ==> String
+	 * 
 	 * @param date
 	 * @return
 	 */
 	public static String dateStr(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(getDateFormat());
-		return sdf.format(date);		
+		return sdf.format(date);
 	}
 	
 	/**
 	 * date + hour
+	 * 
 	 * @param date
 	 * @param addHours
 	 * @return
@@ -38,6 +51,7 @@ public class AnyDateUtil extends DateUtil{
 	
 	/**
 	 * currentDate + min
+	 * 
 	 * @param addMinutes
 	 * @return
 	 */
@@ -49,7 +63,8 @@ public class AnyDateUtil extends DateUtil{
 	}
 
 	/**
-	 * date + min 
+	 * date + min
+	 * 
 	 * @param date
 	 * @param addMinutes
 	 * @return
@@ -63,37 +78,41 @@ public class AnyDateUtil extends DateUtil{
 	
 	/**
 	 * get hour string
+	 * 
 	 * @param date
 	 * @return
 	 */
 	public static String hourStr(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_HOUR_FORMAT);
-		return sdf.format(date);		
+		return sdf.format(date);
 	}
 	
 	/**
 	 * get hour integer
+	 * 
 	 * @param date
 	 * @return
 	 */
 	public static int hourInt(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_HOUR_FORMAT);
-		return ValueUtil.toInteger(sdf.format(date));		
+		return ValueUtil.toInteger(sdf.format(date));
 	}
 	
 	/**
 	 * get min integer
+	 * 
 	 * @param date
 	 * @return
 	 */
 	public static int minInt(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_MIN_FORMAT);
-		return ValueUtil.toInteger(sdf.format(date));		
+		return ValueUtil.toInteger(sdf.format(date));
 	}
 
 
 	/**
-	 * date set min
+	 * Date set min
+	 * 
 	 * @param date
 	 * @param minutes
 	 * @return
@@ -105,9 +124,9 @@ public class AnyDateUtil extends DateUtil{
 		return c.getTime();
 	}
 
-
 	/**
-	 * date set second
+	 * Date set second
+	 * 
 	 * @param date
 	 * @param seconds
 	 * @return
@@ -121,6 +140,7 @@ public class AnyDateUtil extends DateUtil{
 
 	/**
 	 * Date to Year
+	 * 
 	 * @param date
 	 * @return
 	 */
@@ -129,8 +149,10 @@ public class AnyDateUtil extends DateUtil{
 		c.setTime(date);
 		return ValueUtil.toString(c.get(Calendar.YEAR));
 	}
+	
 	/**
 	 * Date to Month
+	 * 
 	 * @param date
 	 * @return
 	 */
@@ -139,8 +161,10 @@ public class AnyDateUtil extends DateUtil{
 		c.setTime(date);
 		return ValueUtil.toString(c.get(Calendar.MONTH));
 	}
+	
 	/**
-	 * Date to day 
+	 * Date to day
+	 * 
 	 * @param date
 	 * @return
 	 */
@@ -149,4 +173,5 @@ public class AnyDateUtil extends DateUtil{
 		c.setTime(date);
 		return ValueUtil.toString(c.get(Calendar.DAY_OF_MONTH));
 	}
+
 }
