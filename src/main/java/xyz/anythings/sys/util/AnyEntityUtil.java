@@ -123,8 +123,8 @@ public class AnyEntityUtil extends EntityUtil {
 		condition.addFilter("id", id);
 		T obj = BeanUtil.get(IQueryManager.class).selectByConditionWithLock(clazz, condition);
 		
-		if(obj == null) {
-			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getName(), id);
+		if(obj == null && exceptionWhenEmpty) {
+			throw ThrowUtil.newNotFoundRecord("terms.menu." + clazz.getSimpleName(), id);
 		} else {
 			return obj;
 		}
